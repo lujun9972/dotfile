@@ -1,0 +1,245 @@
+;; vim:filetype=lisp
+(in-package :stumpwm)
+;; 加载mode
+
+;(set-contrib-dir "/usr/local/share/stumpwm")
+(mapcar #'load-module
+	'("amixer"
+	  "cpu"
+	  "mem"
+	  "battery-portable"
+	  "net"
+	  "wifi"
+	  "disk"
+	  "app-menu"
+	  "stumptray"
+	  ;;"ttf-fonts"
+	  ))
+(set-prefix-key (kbd "F12"))			;设置前缀键,已经在.xinitrc中定义Win为F12了
+;; turn on debugging 0:disable
+(setf stumpwm::*debug-level* 0)
+;(redirect-all-output (data-dir-file "debug-output" "txt"))
+
+;(defun show-key-seq (key seq val)
+;    (message (print-key-seq (reverse seq))))
+;(add-hook *key-press-hook* 'show-key-seq)
+
+(defmacro replace-hook (hook fn)
+    `(remove-hook ,hook ,fn)
+    `(add-hook ,hook ,fn))
+
+; If you like Meta (most probably alt on your keyboard) more than
+; Super (which is the Windows key on mine), change 's-' into 'M-'.
+(defmacro defkey-top (key cmd)
+    `(define-key *top-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-top (&rest keys)
+    (let ((ks (mapcar #'(lambda (k) (cons 'defkey-top k)) keys)))
+        `(progn ,@ks)))
+
+(defmacro defkey-root (key cmd)
+    `(define-key *root-map* (kbd ,key) ,cmd))
+
+(defmacro defkeys-root (&rest keys)
+    (let ((ks (mapcar #'(lambda (k) (cons 'defkey-root k)) keys)))
+        `(progn ,@ks)))
+
+(defcommand display-current-window-info () ()
+  "Shows the properties of the current window. These properties can be
+used for matching windows with run-or-raise or window placement
+-merules."
+  (let ((w (current-window))
+        (*suppress-echo-timeout* t)
+        (nl (string #\NewLine)))
+
+    ;; (message-no-timeout "class: ~a~%instance~a~%..." (window-class w) (window-res w) ...)
+    (echo-string (current-screen)
+                 (concat "class:    " (window-class w) nl
+                         "instance: " (window-res w) nl
+                         "type:     :" (string (window-type w)) nl
+                         "role:     " (window-role w) nl
+                         "title:    " (window-title w) nl
+                         "width:    " (format nil "~a" (window-width w)) nl
+                         "height    " (format nil "~a" (window-height w))))))
+
+; 任何时候按下<s-c>就可以查单词， 非常方便！
+(defcommand dict (word) ((:rest "Word> "))
+  (let ((cmd (format nil "dict ~a" word)))
+    (with-output-to-string (*standard-output*)
+     #+clisp(let ((str (ext:run-shell-command cmd :output :stream :wait nil)))
+       (loop for line = (read-line str nil)
+          until (null line)
+          do (print line)))
+     #+sbcl (sb-ext:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*)
+     #+ccl(ccl:run-program "/bin/sh" (list "-c" cmd) :input nil :output *standard-output*))))
+(set-fg-color "green")
+(set-bg-color "black")
+
+;; 3.  安装字体： xfont-unifont
+;;     这个字体是等宽字体，虽然中英文不能完全对齐，但显示效果很好，
+;;     类似winxp。
+(set-font "*-unifont-medium-*-normal-*-16-*-*-*-*-*-*-*")
+;; (set-font "-*-unifont-medium-i-normal-*-16-*-*-*-*-*-*-*")
+;; suppress the message StumpWM displays when it starts. Set it to NIL
+(setf *startup-message* nil
+      *suppress-frame-indicator* t
+      *suppress-abort-messages* t
+      *timeout-wait* 3
+      *mouse-focus-policy* :click ;; :click, :ignore, :sloppy
+      *message-window-gravity* :bottom-left
+      *input-window-gravity* :bottom-left)
+
+;;; Window Appearance
+(setf *normal-border-width* 1
+      *maxsize-border-width* 1
+      *transient-border-width* 1
+      +default-frame-outline-width+ 1
+      *float-window-title-height* 0
+      *window-border-style* :thin) ; :thick :thin :tight :none
+
+(setf *time-modeline-string* "%Y-%m-%d %a ^B%l:%M^b" 
+      *window-name-source* :title
+      ;; *window-format* "^B^8*%n%s%m%15t | ^7*"
+      *window-format* "%n%s%m%15t | "
+      *group-format* "%t")
+
+(setf *chinese-day-names*
+      '("一" "二" "三" "四" "五" "六" "日"))
+(defun current-date ()
+  "Returns the date formatted as `2009-11-16 一 11:34:03'."
+  (multiple-value-bind
+	(second minute hour date month year day-of-week dst-p tz)
+      (get-decoded-time)
+    (format nil "~d-~2,'0d-~2,'0d ~a ^B~2,'0d:~2,'0d:~2,'0d^b"
+	    year month date (nth day-of-week *chinese-day-names*)
+	    hour minute second)))
+ ;;;; The Mode Line
+(setf *mode-line-background-color* "black"
+      *mode-line-foreground-color* "lightgreen"
+      *mode-line-border-color* "black"
+      *mode-line-border-width* 0
+      *mode-line-pad-x* 0
+      *mode-line-pad-y* 0
+      *mode-line-timeout* 1 
+	  ;; *mode-line-position* :bottom
+      ;; *screen-mode-line-format* (list "[%n]%W" "^>" '(:eval (current-date)))
+	  *screen-mode-line-format* (list
+								 "^6*" '(:eval (current-date)) ; defined above
+								 " | %D | %c(%f,%t) | %M | %l"
+								 '(:eval (run-shell-command "echo" t))
+								 "^2*" "[^B%n^b] %W"))
+
+;; 定义mode-line的点击
+(defun show-params (mode-line button x y)
+  (let ((mode-lin-content (mode-line-contents mode-line)) (mode-line-height (mode-line-height mode-line)))
+  (message "mode-line:~a,~a"  x y))
+  )
+(add-hook *mode-line-click-hook* 'show-params)
+;; turn on/off the mode line for the current screen only.
+(if (not (head-mode-line (current-head)))
+     (toggle-mode-line (current-screen) (current-head)))
+
+;;add hook so I get notified when people say my name on IRC or IM me
+(defun echo-urgent-window (target)
+    (message-no-timeout "~a has an message for you." (window-title target)))
+(add-hook *urgent-window-hook* 'echo-urgent-window)
+
+;; shell program used by `run-shell-command' (`sh' by default, which is *not* 'bash' nor 'zsh')
+(setf *shell-program* (stumpwm::getenv "SHELL"))
+;; (clear-window-placement-rules)
+
+(defun random-string (length)
+  "Return a random string with LENGTH characters."
+  (let ((alphabet (concat
+		   "abcdefghijklmnopqrstuvwxyz"
+		   "0123456789"
+		   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+	(string (make-string length)))
+    (map-into string (lambda (char)
+		       (declare (ignore char))
+		       (aref alphabet (random (length alphabet))))
+	      string)))
+
+(defun my-run-or-raise (cmd props &optional (all-groups *run-or-raise-all-groups*)
+				    (all-screens *run-or-raise-all-screens*))
+  "若程序未运行,则运行程序,否则切换到该程序"
+  (let* ((group (current-group))
+	 (frames (when (eq (type-of group) 'tile-group)
+		   (group-frames group))))
+    (if (> (length frames) 1)
+	(run-or-pull cmd props all-groups all-screens)
+	(run-or-raise cmd props all-groups all-screens))))
+
+(defcommand firefox () ()
+  "Start Firefox or switch to it, if it is already running."
+  (my-run-or-raise "iceweasel" '(:class "Iceweasel")))
+
+(defcommand file-manager () ()
+  "Start nautilus"
+  (my-run-or-raise "nautilus --no-desktop" '(:class "Nautilus")))
+
+(defcommand foxit () ()
+  (launch-crossover-app "FoxitReader" "FoxitReader"))
+
+(defcommand mplayer () ()
+  (my-run-or-raise "smplayer" '(:class "Smplayer")))
+
+(defcommand lock-screen () ()
+  (run-shell-command "exec xscreensaver-command -lock"))
+
+(defcommand dmenu-run () ()
+  (run-shell-command "$(dmenu_path | dmenu -b)"))
+;; 定义类Emacs的快捷键
+(defvar *my-ctrl-x-keymap*
+  (let ((m (stumpwm:make-sparse-keymap)))
+	(stumpwm:define-key m (stumpwm:kbd "o") "fnext")
+	(stumpwm:define-key m (stumpwm:kbd "C-b") "frame-windowlist")
+	(stumpwm:define-key m (stumpwm:kbd "b") "pull-window-by-number")
+	(stumpwm:define-key m (stumpwm:kbd "C-c") "quit")
+	(stumpwm:define-key m (stumpwm:kbd "k") "delete-window")
+	(stumpwm:define-key m (stumpwm:kbd "K") "kill-window")
+	(stumpwm:define-key m (stumpwm:kbd "1") "only")
+	(stumpwm:define-key m (stumpwm:kbd "2") "vsplit")
+	(stumpwm:define-key m (stumpwm:kbd "3") "hsplit")
+	m))
+(stumpwm:define-key *root-map* (stumpwm:kbd "C-x") '*my-ctrl-x-keymap*)
+
+;; 定义类似awesome的快捷键
+(defkey-top "M-TAB" "other-in-frame")
+(defkey-top "s-j" "next-in-frame")
+(defkey-top "s-k" "prev-in-frame")
+(defkey-top "s-r" "dmenu-run")
+;; (defkey-top "s-r" "run-shell-command")
+(defkey-top "s-q" "quit")
+(defkey-root "M-x" "colon")
+(defkey-top "s-RET" "exec x-terminal-emulator")
+(defkey-root "f" "file-manager")
+ 
+;; 定义声音
+(define-key *top-map* (kbd "XF86AudioLowerVolume") "amixer-Front-1-")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume") "amixer-Front-1+")
+(define-key *top-map* (kbd "XF86AudioMute") "amixer-Master-toggle pulse")
+
+;; 定义s-Fn为切换到第n个group
+(defkey-top "s-F1" "gselect 1")
+(defkey-top "s-F2" "gselect 2")
+(defkey-top "s-F3" "gselect 3")
+(defkey-top "s-F4" "gselect 4")
+(defkey-top "s-F5" "gselect 5")
+
+;; 定义s-n为切换到第n个window
+(defkey-top "s-`" "select-window-by-number 0")
+(defkey-top "s-1" "select-window-by-number 1")
+(defkey-top "s-2" "select-window-by-number 2")
+(defkey-top "s-3" "select-window-by-number 3")
+(defkey-top "s-4" "select-window-by-number 4")
+(defkey-top "s-5" "select-window-by-number 5")
+
+
+(run-commands "stumptray")
+(run-shell-command "~/.nutstore/dist/bin/nutstore-pydaemon.py")
+(run-shell-command "xset b off")
+(run-shell-command "xfce4-power-manager")
+(run-shell-command "xscreensaver -no-splash")
+(run-shell-command "nm-applet")
+(run-shell-command "volti")
