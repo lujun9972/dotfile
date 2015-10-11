@@ -234,6 +234,10 @@ used for matching windows with run-or-raise or window placement
 (defkey-top "s-3" "select-window-by-number 3")
 (defkey-top "s-4" "select-window-by-number 4")
 (defkey-top "s-5" "select-window-by-number 5")
+(defkey-top "s-5" "select-window-by-number 6")
+(defkey-top "s-5" "select-window-by-number 7")
+(defkey-top "s-5" "select-window-by-number 8")
+(defkey-top "s-5" "select-window-by-number 9")
 
 
 (run-commands "stumptray")
