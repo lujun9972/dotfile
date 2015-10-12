@@ -105,6 +105,7 @@ values."
      ;; ----------------------------------------------------------------
      auto-completion
      better-defaults
+     smex
      (deft :variables
        deft-recursive t
        deft-directory MY-NOTE-PATH)
@@ -156,7 +157,7 @@ values."
      my-file
      my-eshell
      my-program
-     my-lifs
+     my-life
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
