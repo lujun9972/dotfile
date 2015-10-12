@@ -126,20 +126,19 @@ values."
      (erc :variables
           erc-nick "lujun9972"  		;设置昵称
           erc-user-full-name "lujunwei" ;设置全称
-          erc-email-userid "lujun9972@gmail.com"  
-          ;; erc-server "irc.freenode.net"  
-          ;; erc-port "6667"  
-
+          erc-email-userid "lujun9972@gmail.com"
+          ;; erc-server "irc.freenode.net"
+          ;; erc-port "6667"
           erc-autojoin-channels-alist	;设置自动登录的频道
-          '(("freenode.net" "ubuntu-cn")  
-            ("oftc.net" "#emacs-cn"))  
+          '(("freenode.net" "ubuntu-cn")
+            ("oftc.net" "#emacs-cn"))
 
           erc-keywords '("emacs" "lisp") ;高亮消息中的关键字
-          erc-pals '("rms")  
+          erc-pals '("rms")
 
-          erc-format-nick-function 'erc-format-@nick  
+          erc-format-nick-function 'erc-format-@nick
           erc-interpret-mirc-color t	;支持mIRC风格的颜色命令
-          erc-button-buttonize-nicks nil  
+          erc-button-buttonize-nicks nil
           erc-track-position-in-mode-line 'before-modes
           erc-encoding-coding-alist '(("#linuxfire" . chinese-iso-8bit))
           erc-ignore-list nil)
