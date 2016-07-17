@@ -1,0 +1,57 @@
+* update apt source
+#+BEGIN_SRC sh
+  sudo apt-get update
+#+END_SRC
+* install git
+#+BEGIN_SRC sh
+  sudo apt-get install -y git
+  git config --global user.email "lujun9972@gmail.com"
+  git config --global user.name "DarkSun"
+  git config --global push.default simple
+#+END_SRC
+* install 
+#+BEGIN_SRC sh
+  sudo apt-get install -y w3m xfce4 xfce4-goodies gnome-panel smplayer
+#+END_SRC
+* shadowsocks-qt5
+#+BEGIN_SRC sh
+  sudo add-apt-repository ppa:hzwhuang/ss-qt5
+  sudo apt-get update
+  sudo apt-get install shadowsocks-qt5
+#+END_SRC
+* 坚果云
+#+BEGIN_SRC sh
+  sudo apt-get -y install default-jre-headless python-gtk2
+  curl -o ~/下载/nautilus_nutstore_amd4.deb https://www.jianguoyun.com/static/exe/installer/ubuntu/nautilus_nutstore_amd64.deb
+  sudo dpkg -i ~/下载/nautilus_nutstore_amd4.deb
+  sudo apt-get install -f -y
+#+END_SRC
+
+* 有道云笔记
+#+BEGIN_SRC sh
+  curl -o ~/下载/youdao-dict_1.1.0-0-ubuntu_amd64.deb http://codown.youdao.com/cidian/linux/youdao-dict_1.1.0-0-ubuntu_amd64.deb
+  sudo dpkg -i ~/下载/youdao-dict_1.1.0-0-ubuntu_amd64.deb
+  sudo apt-get install -f -y
+#+END_SRC
+
+#+RESULTS:
+
+* dict/dictd
+#+BEGIN_SRC sh
+  sudo apt-get install dictd dict dict-gcide dict-moby-thesaurus dict-wn
+#+END_SRC
+
+* emacs-configure
+#+BEGIN_SRC sh
+ssh-keygen -y
+cat cat .ssh/id_rsa.pub
+#+END_SRC
+#+BEGIN_SRC sh
+  git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
+  git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
+  mv ~/.emacs.d ~/emacs.d
+  git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+#+END_SRC
+
+#+RESULTS:
+
