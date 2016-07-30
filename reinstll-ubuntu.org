@@ -21,7 +21,7 @@
 #+END_SRC
 * 坚果云
 #+BEGIN_SRC sh
-  sudo apt-get -y install default-jre-headless python-gtk2
+  sudo apt-get -y install default-jre-headless python-gtk2 python-notify
   curl -o ~/下载/nautilus_nutstore_amd4.deb https://www.jianguoyun.com/static/exe/installer/ubuntu/nautilus_nutstore_amd64.deb
   sudo dpkg -i ~/下载/nautilus_nutstore_amd4.deb
   sudo apt-get install -f -y
