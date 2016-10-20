@@ -3,10 +3,14 @@
 #+CATEGORY: dotfile
 #+DATE: [2016-10-20 四 08:08]
 #+OPTIONS: ^:{}
+#+PROPERTY: header-args :comments link :tangle-mode (identity #o444) :mkdirp yes
 
 * 窗口管理器配置
 ** AwesomeWM
-#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua" :mkdirp yes
+:PROPERTIES:
+:tangle:  ~/.config/awesome/rc.lua
+:END:
+#+BEGIN_SRC lua 
   -- Standard awesome library
   local gears = require("gears")
   local awful = require("awful")
@@ -456,23 +460,28 @@
   client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
   -- }}}
 
+#+END_SRC
+
+配置自动启动
+#+BEGIN_SRC lua
   -- Autorun programs
-  -- autorun = true
-  -- autorunApps = 
-  --   { 
-  --     "emacs -d"
-  --   }
+  autorun = true
+  autorunApps = 
+    { 
+      "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
+    }
 
-  -- if autorun then
-  --   for app = 1, #autorunApps do
-  --     awful.util.spawn(autorunApps[app])
-  --   end
-  -- end
-
+  if autorun then
+    for app = 1, #autorunApps do
+      awful.util.spawn_with_shell(autorunApps[app])
+    end
+  end
 #+END_SRC
 ** Stumpwm 
-
-#+BEGIN_SRC lisp :tangle "~/.stumpwm" :mkdirp yes
+:PROPERTIES:
+:tangle:  ~/.stumpwmrc
+:END:
+#+BEGIN_SRC lisp 
   ;; vim:filetype=lisp
   (in-package :stumpwm)
   ;; 加载mode
@@ -731,7 +740,7 @@
   # ~/.bash_profile
   #
 
-  ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
+  # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
 
   [[ -f ~/.bashrc ]] && . ~/.bashrc
 
@@ -742,8 +751,9 @@
   export GTK_IM_MODULE=fcitx
   export QT_IM_MODULE=fcitx
   export XMODIFIERS="@im=fcitx"
+  export LANG=zh_CN.UTF-8
   xmodmap -e "keycode 151 = Super_L XF86WakeUp "
-  fcitx
+  fcitx &
   exec awesome
 
 #+END_SRC
