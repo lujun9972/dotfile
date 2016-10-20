@@ -1,0 +1,114 @@
+#+TITLE: reinstall-arch
+#+AUTHOR: lujun9972
+#+CATEGORY: dotfile
+#+DATE: [2016-10-20 四 08:17]
+#+OPTIONS: ^:{}
+
+* 安装arch
+安装arch很简单，基本上按照arch wiki上写的一步步来就行了。
+
+不过在过程中还是遇到了一个小坑：
+
+按照Wiki的说法, =arch-chroot= 之后需要再次设置网络，但是我用wifi-menu重设了一次无线网络后，结果提示
+#+BEGIN_EXAMPLE
+  Interface 'wlp4s2' is controlled by netctl-auto
+#+END_EXAMPLE
+
+然后尝试ping外网发现网络是断的。推出chroot后用 =ip link= 发现wlp4s2接口被down掉了.
+
+在up该接口后,回复互联网的访问. 然后重新进入 =arch-chroot= 继续后面的操作.
+#+BEGIN_SRC sh
+  ip link set wlp4s2 up
+#+END_SRC
+
+* 配置网络
+
+1. 用 =wifi-menu= 配置好wifi
+   #+BEGIN_SRC sh :dir /sudo::
+     wifi-menu -o
+   #+END_SRC
+
+2. 安装自动连接wifi的软件包
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman -S --needed wpa_actiond ifplugd wpa_supplicant
+   #+END_SRC
+   其中:
+   + wpa_actiond :: 用于自动连接无线网络（Wireless Roaming/autoconnect ）
+   + ifplugd :: 用于自动连接以太网（Wired link detection ）。
+   + wpa_supplicant :: 用于无线网络认证
+
+3. 关闭netctl服务,启动netctl-auto服务
+   #+BEGIN_SRC sh :dir /sudo::
+     systemctl disable netctl
+     systemctl enable netctl-auto@wlp4s2
+   #+END_SRC
+     
+   *不能同时启动netctl与netctl-auto*,两者冲突
+
+* 配置中文输入法
+
+1. 安装fictx
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman -S fcitx fcitx-sunpinyin
+   #+END_SRC
+
+2. 在.xinitrc中添加:
+   #+BEGIN_SRC conf :tangle "~/.xinitrc"
+     export GTK_IM_MODULE=fcitx
+     export QT_IM_MODULE=fcitx
+     export XMODIFIERS="@im=fcitx"
+     fcitx &
+   #+END_SRC
+
+* Git
+1. 安装git
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman -S git
+   #+END_SRC
+
+2. 配置git
+   #+BEGIN_SRC sh
+     git config --global --global user.email "lujun9972@gmail.com"
+     git config --global --global user.name "darksun"
+   #+END_SRC
+
+* openssh
+1. 安装openssh
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman -S git
+   #+END_SRC
+
+2. 生成公钥
+   #+BEGIN_SRC sh
+     ssh-keygen -y
+     cat .ssh/id_rsa.pub
+   #+END_SRC
+
+3. 将公钥内容放到 [[https://www.github.com][github]] 中
+
+* Emacs
+1. 安装Emacs
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman -S emacs
+   #+END_SRC
+2. 安装配置
+   #+BEGIN_SRC sh
+     git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
+     git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
+     mv ~/.emacs.d ~/emacs.d
+     git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+   #+END_SRC
+
+* 窗口管理器
+1. 安装awesomeWm
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman -S awesome
+   #+END_SRC
+
+2. 在.xinitrc中添加:
+   #+BEGIN_SRC conf :tangle "~/.xinitrc"
+     exec awesome &
+   #+END_SRC
+
+3. 配置
+   从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
