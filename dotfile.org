@@ -724,3 +724,26 @@
   (run-shell-command "volti")
 
 #+END_SRC
+* bash登陆相关配置
+** bash_profile
+#+BEGIN_SRC sh :tangle "~/.bash_profile"
+  #
+  # ~/.bash_profile
+  #
+
+  ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
+
+  [[ -f ~/.bashrc ]] && . ~/.bashrc
+
+#+END_SRC
+* X相关配置
+** xinitrc
+#+BEGIN_SRC sh :tangle "~/.xinitrc"
+  export GTK_IM_MODULE=fcitx
+  export QT_IM_MODULE=fcitx
+  export XMODIFIERS="@im=fcitx"
+  xmodmap -e "keycode 151 = Super_L XF86WakeUp "
+  fcitx
+  exec awesome
+
+#+END_SRC
