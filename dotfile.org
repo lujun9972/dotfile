@@ -106,13 +106,14 @@
   -- Create a laucher widget and a main menu
   myawesomemenu = {
     { "manual", emacsclient_newframe .. " -e '(man \"awesome\")'" },
-     { "edit config", "ec " .. awesome.conffile },
+     { "edit config", emacsclient_newframe .. awesome.conffile },
      { "restart", awesome.restart },
      { "quit", awesome.quit }
   }
 
   mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                               { "Eshell", eshell },
+                              { "Firefox", "firefox" },
                               { "open terminal", terminal }
                                     }
                           })
@@ -752,8 +753,10 @@
   export QT_IM_MODULE=fcitx
   export XMODIFIERS="@im=fcitx"
   export LANG=zh_CN.UTF-8
-  xmodmap -e "keycode 151 = Super_L XF86WakeUp "
   fcitx &
+  xmodmap -e "remove lock = Caps_Lock"
+  xmodmap -e "add lock = Super_L"
+  # xmodmap -e "keycode 166 = Super_L XF86WakeUp "
   exec awesome
 
 #+END_SRC
