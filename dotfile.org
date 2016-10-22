@@ -105,7 +105,7 @@
   -- {{{ Menu
   -- Create a laucher widget and a main menu
   myawesomemenu = {
-    { "manual", emacsclient_newframe .. " -e '(man \"awesome\")'" },
+    { "manual", emacsclient_newframe .. " -e '(man \"awesome\")(delete-other-windows)'" },
      { "edit config", emacsclient_newframe .. awesome.conffile },
      { "restart", awesome.restart },
      { "quit", awesome.quit }
@@ -464,6 +464,7 @@
 #+END_SRC
 
 配置自动启动
+
 #+BEGIN_SRC lua
   -- Autorun programs
   autorun = true
@@ -753,10 +754,9 @@
   export QT_IM_MODULE=fcitx
   export XMODIFIERS="@im=fcitx"
   export LANG=zh_CN.UTF-8
-  fcitx &
-  xmodmap -e "remove lock = Caps_Lock"
-  xmodmap -e "add lock = Super_L"
-  # xmodmap -e "keycode 166 = Super_L XF86WakeUp "
+  fcitx
+  xmodmap -e "remove Lock = Caps_Lock"
+  xmodmap -e "keysym Caps_Lock = Super_R"
+  # xmodmap -e "keysym XF86WakeUp = Super_R"
   exec awesome
-
 #+END_SRC
