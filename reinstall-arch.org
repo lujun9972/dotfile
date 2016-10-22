@@ -53,7 +53,7 @@
    #+END_SRC
 
 2. 在.xinitrc中添加:
-   #+BEGIN_SRC conf :tangle "~/.xinitrc"
+   #+BEGIN_SRC conf
      export GTK_IM_MODULE=fcitx
      export QT_IM_MODULE=fcitx
      export XMODIFIERS="@im=fcitx"
@@ -106,9 +106,18 @@
    #+END_SRC
 
 2. 在.xinitrc中添加:
-   #+BEGIN_SRC conf :tangle "~/.xinitrc"
-     exec awesome &
+   #+BEGIN_SRC conf
+     exec awesome
    #+END_SRC
 
 3. 配置
    从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
+* 恢复配置
+#+BEGIN_SRC emacs-lisp
+  (require 'url-handlers)
+  (let ((tmpfile (make-temp-name "dotfile")))
+    (url-copy-file  "https://raw.githubusercontent.com/lujun9972/dotfile/master/dotfile.org" tmpfile)
+    (find-file tmpfile)
+    (org-mode)
+    (call-interactively #'org-babel-tangle))
+#+END_SRC
