@@ -99,6 +99,12 @@
      git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
    #+END_SRC
 
+* Socketsock
+** 安装
+#+BEGIN_SRC sh /sudo::
+  pacman -S shadowsocks
+#+END_SRC
+     
 * 窗口管理器
 1. 安装awesomeWm
    #+BEGIN_SRC sh :dir /sudo::
@@ -113,7 +119,7 @@
 3. 配置
    从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
 * 恢复配置
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results raw
   (require 'url-handlers)
   (let ((tmpfile (make-temp-name "dotfile")))
     (url-copy-file  "https://raw.githubusercontent.com/lujun9972/dotfile/master/dotfile.org" tmpfile)
@@ -121,3 +127,7 @@
     (org-mode)
     (call-interactively #'org-babel-tangle))
 #+END_SRC
+
+#+RESULTS:
+(~/.config/awesome/rc.lua ~/.stumpwmrc ~/.xinitrc ~/.bash_profile)
+
