@@ -121,13 +121,10 @@
 * 恢复配置
 #+BEGIN_SRC emacs-lisp :results raw
   (require 'url-handlers)
-  (let ((tmpfile (make-temp-name "dotfile")))
+  (let ((tmpfile (make-temp-name "/tmp/dotfile")))
     (url-copy-file  "https://raw.githubusercontent.com/lujun9972/dotfile/master/dotfile.org" tmpfile)
     (find-file tmpfile)
     (org-mode)
-    (call-interactively #'org-babel-tangle))
+    (call-interactively #'org-babel-tangle)
+    (delete-file tmpfile))
 #+END_SRC
-
-#+RESULTS:
-(~/.config/awesome/rc.lua ~/.stumpwmrc ~/.xinitrc ~/.bash_profile)
-
