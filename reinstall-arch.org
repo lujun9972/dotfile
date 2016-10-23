@@ -138,6 +138,11 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
 #+END_SRC
 
 * 恢复配置
+我用Emacs的org-mode来管理dotfile. 
+
+所有的dotfile基本都以src block的形式存在https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中了
+
+只需要执行下面这段emacs-lisp代码就能恢复配置了
 #+BEGIN_SRC emacs-lisp :results raw
   (require 'url-handlers)
   (let ((tmpfile (make-temp-name "/tmp/dotfile")))
