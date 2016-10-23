@@ -760,3 +760,11 @@
   # xmodmap -e "keysym XF86WakeUp = Super_R"
   exec awesome
 #+END_SRC
+* 将Caps_Ctrl换成Win键
+对于X41这种不带Win键，但是awesome没有Win键是很难用的。可以按照下面步骤来将Caps_Lock换成Win键
+
+#+BEGIN_SRC sh
+  xmapmode -pke > ~/.Xmodmap
+  echo "remove Lock = Caps_Lock" >> ~/.Xmodmap
+  echo "keysym Caps_Lock = Super_R" >> ~/.Xmodmap
+#+END_SRC
