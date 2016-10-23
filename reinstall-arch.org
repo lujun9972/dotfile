@@ -105,9 +105,6 @@
   pacman --noconfirm -S shadowsocks
 #+END_SRC
 
-#+RESULTS:
-
-     
 * 窗口管理器
 1. 安装awesomeWm
    #+BEGIN_SRC sh :dir /sudo::
