@@ -30,7 +30,7 @@
 
 2. 安装自动连接wifi的软件包
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S --needed wpa_actiond ifplugd wpa_supplicant
+     pacman --noconfirm -S --needed wpa_actiond ifplugd wpa_supplicant
    #+END_SRC
    其中:
    + wpa_actiond :: 用于自动连接无线网络（Wireless Roaming/autoconnect ）
@@ -49,7 +49,7 @@
 
 1. 安装fictx
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S fcitx fcitx-sunpinyin
+     pacman --noconfirm -S fcitx-im fcitx-configtool fcitx-sunpinyin
    #+END_SRC
 
 2. 在.xinitrc中添加:
@@ -63,7 +63,7 @@
 * Git
 1. 安装git
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S git
+     pacman --noconfirm -S git
    #+END_SRC
 
 2. 配置git
@@ -75,7 +75,7 @@
 * openssh
 1. 安装openssh
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S git
+     pacman --noconfirm -S git
    #+END_SRC
 
 2. 生成公钥
@@ -89,7 +89,7 @@
 * Emacs
 1. 安装Emacs
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S emacs
+     pacman --noconfirm -S emacs
    #+END_SRC
 2. 安装配置
    #+BEGIN_SRC sh
@@ -101,14 +101,17 @@
 
 * Socketsock
 ** 安装
-#+BEGIN_SRC sh /sudo::
-  pacman -S shadowsocks
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S shadowsocks
 #+END_SRC
+
+#+RESULTS:
+
      
 * 窗口管理器
 1. 安装awesomeWm
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S awesome
+     pacman --noconfirm -S awesome
    #+END_SRC
 
 2. 在.xinitrc中添加:
@@ -118,6 +121,11 @@
 
 3. 配置
    从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
+* mpg123
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S mpg123
+#+END_SRC
+
 * 恢复配置
 #+BEGIN_SRC emacs-lisp :results raw
   (require 'url-handlers)
