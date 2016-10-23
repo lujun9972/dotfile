@@ -1,4 +1,4 @@
-#+TITLE: reinstall-arch
+#+TITLE: 装Arch记
 #+AUTHOR: lujun9972
 #+CATEGORY: dotfile
 #+DATE: [2016-10-20 四 08:17]
