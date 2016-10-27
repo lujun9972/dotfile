@@ -75,7 +75,13 @@
    #+BEGIN_SRC sh
      git config --global --global user.email "lujun9972@gmail.com"
      git config --global --global user.name "darksun"
+     # 配置diff工具
+     git config --global diff.tool ediff
+     git config --global difftool.ediff.cmd "~/bin/ediff.sh \"\$LOCAL\" \"\$REMOTE\""
+     git config --global difftool.prompt false
    #+END_SRC
+
+   #+RESULTS:
 
 * openssh
 1. 安装openssh
