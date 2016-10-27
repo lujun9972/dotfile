@@ -105,7 +105,7 @@
   -- {{{ Menu
   -- Create a laucher widget and a main menu
   myawesomemenu = {
-    { "manual", emacsclient_newframe .. " -e '(man \"awesome\")(delete-other-windows)'" },
+    { "manual", emacsclient_newframe .. " -e '(man \"awesome\")'" },
      -- { "edit config", emacsclient_newframe .. awesome.conffile },
      { "edit config", emacsclient_newframe .. "~/github/dotfile/dotfile.org" },
      { "restart", awesome.restart },
