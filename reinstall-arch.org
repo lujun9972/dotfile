@@ -49,6 +49,21 @@
    #+END_SRC
      
    *不能同时启动netctl与netctl-auto*,两者冲突
+* 配置用户
+1. 创建用户
+   #+BEGIN_SRC sh /sudo::
+     useradd -m -g users -s /bin/bash lujun9972
+     # passwd lujun9972
+   #+END_SRC
+2. 配置sudo
+   #+BEGIN_SRC sh /sudo::
+     visudo
+   #+END_SRC
+   让wheel组的用户能够suduo
+3. 将用户加入wheel组
+   #+BEGIN_SRC sh /sudo::
+     usermod -a -G wheel lujun9972
+   #+END_SRC
 
 * 配置中文输入法
 
