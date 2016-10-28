@@ -119,6 +119,7 @@
    #+END_SRC
 2. 安装配置
    #+BEGIN_SRC sh
+     git clone git@github.com:lujun9972/bin.git ~/bin
      git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
      git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
      mv ~/.emacs.d ~/emacs.d
