@@ -134,7 +134,7 @@
 * 窗口管理器
 1. 安装X
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S xorg-server xorg-server-utils    # 安装 Xorg Server
+     pacman -S xorg    # 安装 Xorg
      # pacman -S xf86-input-synaptics    # 可选，触摸板支持
      pacman -S ttf-dejavu wqy-microhei    # 可选，Dejavu 与文泉驿 - 微米黑字体
    #+END_SRC
