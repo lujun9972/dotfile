@@ -166,6 +166,26 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
   pacman --noconfirm -S mpg123
 #+END_SRC
 
+* 坚果云
+1. 安装依赖package
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S glib2 gtk2 libnautilus-extension gvfs jre8-openjdk wget
+   #+END_SRC
+
+2. 下载源代码
+   #+BEGIN_SRC sh  :dir /sudo::
+     curl http://www.jianguoyun.com/static/exe/installer/nutstore_linux_src_installer.tar.gz -o nutstore_linux_src_installer.tar.gz
+   #+END_SRC
+
+3. 解压，编译, 安装插件
+   #+BEGIN_SRC sh :dir /sudo::
+     tar zxf nutstore_linux_src_installer.tar.gz
+     cd nutstore_linux_src_installer
+     ./configure && make
+     make install
+     ./runtime_bootstrap
+   #+END_SRC
+
 * 恢复配置
 我用Emacs的org-mode来管理dotfile. 
 
