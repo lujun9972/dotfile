@@ -746,6 +746,23 @@
   # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
 
   [[ -f ~/.bashrc ]] && . ~/.bashrc
+  export PATH=~/bin:$PATH
+
+#+END_SRC
+** bashrc
+#+BEGIN_SRC sh :tangle "~/.bashrc"
+  #
+  # ~/.bashrc
+  #
+  # If not running interactively, don't do anything
+  [[ $- != *i* ]] && return
+
+  alias "vi=vim"
+  alias ls='ls --color=auto'
+  PS1='[\u@\h \W]\$ '
+
+  # NO BEEP
+  setterm -blength 0
 
 #+END_SRC
 * X相关配置
