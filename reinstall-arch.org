@@ -129,6 +129,11 @@
 
 3. 配置
    从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
+
+4. 安装archlinux-xdg-menu
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S archlinux-xdg-menu
+   #+END_SRC
 * 声音配置
 Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer（所属包：alsa-utils） 取消静音：
 #+BEGIN_SRC sh

@@ -111,8 +111,11 @@
      { "restart", awesome.restart },
      { "quit", awesome.quit }
   }
+  -- 自动生成的xdg_menu
+  xdg_menu = require("archmenu")
 
   mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                              { "Applications", xdgmenu },
                               { "Eshell", eshell },
                               { "Firefox", "firefox" },
                               { "open terminal", terminal }
@@ -745,6 +748,9 @@
 
   # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
 
+  # NO BEEP
+  setterm -blength 0
+
   [[ -f ~/.bashrc ]] && . ~/.bashrc
   export PATH=~/bin:$PATH
 
@@ -761,13 +767,14 @@
   alias ls='ls --color=auto'
   PS1='[\u@\h \W]\$ '
 
-  # NO BEEP
-  setterm -blength 0
 
 #+END_SRC
 * X相关配置
 ** xinitrc
 #+BEGIN_SRC sh :tangle "~/.xinitrc"
+  # NO BEEP
+  xset -b
+  # setup fcitx
   export GTK_IM_MODULE=fcitx
   export QT_IM_MODULE=fcitx
   export XMODIFIERS="@im=fcitx"
