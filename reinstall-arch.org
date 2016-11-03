@@ -49,6 +49,21 @@
    #+END_SRC
      
    *不能同时启动netctl与netctl-auto*,两者冲突
+* 配置用户
+1. 创建用户
+   #+BEGIN_SRC sh :dir /sudo::
+     useradd -m -g users -s /bin/bash lujun9972
+     # passwd lujun9972
+   #+END_SRC
+2. 配置sudo
+   #+BEGIN_SRC sh :dir /sudo::
+     visudo
+   #+END_SRC
+   让wheel组的用户能够suduo
+3. 将用户加入wheel组
+   #+BEGIN_SRC sh /sudo::
+     usermod -a -G wheel lujun9972
+   #+END_SRC
 
 * 配置中文输入法
 
@@ -75,6 +90,7 @@
    #+BEGIN_SRC sh
      git config --global --global user.email "lujun9972@gmail.com"
      git config --global --global user.name "darksun"
+     git config --global core.quotepath false
      # 配置diff工具
      git config --global diff.tool ediff
      git config --global difftool.ediff.cmd "~/bin/ediff.sh \"\$LOCAL\" \"\$REMOTE\""
@@ -104,6 +120,7 @@
    #+END_SRC
 2. 安装配置
    #+BEGIN_SRC sh
+     git clone git@github.com:lujun9972/bin.git ~/bin
      git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
      git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
      mv ~/.emacs.d ~/emacs.d
@@ -117,17 +134,24 @@
 #+END_SRC
 
 * 窗口管理器
-1. 安装awesomeWm
+1. 安装X
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman -S xorg    # 安装 Xorg
+     # pacman -S xf86-input-synaptics    # 可选，触摸板支持
+     pacman -S ttf-dejavu wqy-microhei    # 可选，Dejavu 与文泉驿 - 微米黑字体
+   #+END_SRC
+
+2. 安装awesomeWm
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S awesome
    #+END_SRC
 
-2. 在.xinitrc中添加:
+3. 在.xinitrc中添加:
    #+BEGIN_SRC conf
      exec awesome
    #+END_SRC
 
-3. 配置
+4. 配置
    从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
 
 4. 安装archlinux-xdg-menu
@@ -173,6 +197,32 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S mpv
    #+END_SRC
+=======
+* mpg123
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S mpg123
+#+END_SRC
+
+* 坚果云
+1. 安装依赖package
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S glib2 gtk2 libnautilus-extension gvfs jre8-openjdk wget
+   #+END_SRC
+
+2. 下载源代码
+   #+BEGIN_SRC sh  :dir /sudo::
+     curl http://www.jianguoyun.com/static/exe/installer/nutstore_linux_src_installer.tar.gz -o nutstore_linux_src_installer.tar.gz
+   #+END_SRC
+
+3. 解压，编译, 安装插件
+   #+BEGIN_SRC sh :dir /sudo::
+     tar zxf nutstore_linux_src_installer.tar.gz
+     cd nutstore_linux_src_installer
+     ./configure && make
+     make install
+     ./runtime_bootstrap
+   #+END_SRC
+
 * 恢复配置
 我用Emacs的org-mode来管理dotfile. 
 
