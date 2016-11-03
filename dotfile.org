@@ -266,7 +266,7 @@
           end),
 
       -- Standard program
-      awful.key({ modkey,           }, "Return", function () awful.util.spawn(eshell) end),
+      awful.key({ modkey,           }, "Return", function () awful.util.spawn("eshell.sh") end),
       awful.key({ modkey, "Control" }, "r", awesome.restart),
       awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -754,6 +754,8 @@
   [[ -f ~/.bashrc ]] && . ~/.bashrc
   export PATH=~/bin:$PATH
 
+  # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
+  [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] && exec startx
 #+END_SRC
 ** bashrc
 #+BEGIN_SRC sh :tangle "~/.bashrc"
@@ -774,13 +776,20 @@
 #+BEGIN_SRC sh :tangle "~/.xinitrc"
   # NO BEEP
   xset -b
+
   # setup fcitx
   export GTK_IM_MODULE=fcitx
   export QT_IM_MODULE=fcitx
   export XMODIFIERS="@im=fcitx"
   export LANG=zh_CN.UTF-8
   fcitx
-  ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon
+
+  # RUN emacs --daemon
+  ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon &
+
+  # 屏幕保护程序
+  # xscreensaver &
+
   # xmodmap -e "remove Lock = Caps_Lock"
   # xmodmap -e "keysym Caps_Lock = Super_R"
   # xmodmap -e "keysym XF86WakeUp = Super_R"
