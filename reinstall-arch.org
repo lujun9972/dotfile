@@ -197,7 +197,6 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S mpv
    #+END_SRC
-=======
 * mpg123
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S mpg123
