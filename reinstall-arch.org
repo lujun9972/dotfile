@@ -158,6 +158,11 @@
 
 4. 配置
    从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
+
+4. 安装archlinux-xdg-menu
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S archlinux-xdg-menu
+   #+END_SRC
 * 声音配置
 Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer（所属包：alsa-utils） 取消静音：
 #+BEGIN_SRC sh
@@ -167,6 +172,36 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
 + 方向键 选中 Master 和 PCM
 + [M] 取消静音
 + 上下键调整音量
+* Terminator(可选,用eshell代替)
+1. tilda
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S tilda
+   #+END_SRC
+* 文件管理器(可选，用dired代替)
+1. rox
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S rox
+   #+END_SRC
+* 多媒体
+** mp3播放
+1. mpg123
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S mpg123
+   #+END_SRC
+** 看图工具
+1. feh
+   #+BEGIN_SRC  sh :dir /sudo::
+     pacman --noconfirm -S feh
+   #+END_SRC
+2. sxiv
+   #+BEGIN_SRC  sh :dir /sudo::
+     pacman --noconfirm -S sxiv
+   #+END_SRC
+** 看视频
+1. mpv
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S mpv
+   #+END_SRC
 * mpg123
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S mpg123
