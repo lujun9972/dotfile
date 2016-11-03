@@ -143,11 +143,36 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
 + 方向键 选中 Master 和 PCM
 + [M] 取消静音
 + 上下键调整音量
-* mpg123
-#+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S mpg123
-#+END_SRC
-
+* Terminator
+1. tilda
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S tilda
+   #+END_SRC
+* 文件管理器
+1. rox
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S rox
+   #+END_SRC
+* 多媒体
+** mp3播放
+1. mpg123
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S mpg123
+   #+END_SRC
+** 看图工具
+1. feh
+   #+BEGIN_SRC  sh :dir /sudo::
+     pacman --noconfirm -S feh
+   #+END_SRC
+2. sxiv
+   #+BEGIN_SRC  sh :dir /sudo::
+     pacman --noconfirm -S sxiv
+   #+END_SRC
+** 看视频
+1. mpv
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S mpv
+   #+END_SRC
 * 恢复配置
 我用Emacs的org-mode来管理dotfile. 
 

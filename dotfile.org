@@ -58,7 +58,6 @@
   editor = os.getenv("EDITOR") or "vi"
   editor_cmd = terminal .. " -e " .. editor
   emacsclient_newframe = "emacsclient -a \"\" -n -c "
-  eshell = emacsclient_newframe .. "-e \"(eshell)\" "
 
   -- Default modkey.
   -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -116,9 +115,10 @@
 
   mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                               { "Applications", xdgmenu },
-                              { "Eshell", eshell },
+                              { "Eshell", "eshell.sh"},
+                              { "dired", "dired.sh" },
                               { "Firefox", "firefox" },
-                              { "open terminal", terminal }
+                              { "open terminal", "tilda" }
                                     }
                           })
 
