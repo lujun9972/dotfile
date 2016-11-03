@@ -167,12 +167,12 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
 + 方向键 选中 Master 和 PCM
 + [M] 取消静音
 + 上下键调整音量
-* Terminator
+* Terminator(可选,用eshell代替)
 1. tilda
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S tilda
    #+END_SRC
-* 文件管理器
+* 文件管理器(可选，用dired代替)
 1. rox
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S rox
