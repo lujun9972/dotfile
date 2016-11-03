@@ -467,14 +467,14 @@
 
 #+END_SRC
 
-配置自动启动
+配置自动启动,不过一般来说我比较喜欢直接写在.xinitrc中
 
 #+BEGIN_SRC lua
   -- Autorun programs
   autorun = true
   autorunApps = 
     { 
-      "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
+      -- "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
     }
 
   if autorun then
@@ -780,6 +780,7 @@
   export XMODIFIERS="@im=fcitx"
   export LANG=zh_CN.UTF-8
   fcitx
+  ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon
   # xmodmap -e "remove Lock = Caps_Lock"
   # xmodmap -e "keysym Caps_Lock = Super_R"
   # xmodmap -e "keysym XF86WakeUp = Super_R"
