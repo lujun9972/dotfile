@@ -202,11 +202,6 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S mpv
    #+END_SRC
-* mpg123
-#+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S mpg123
-#+END_SRC
-
 * 坚果云
 1. 安装依赖package
    #+BEGIN_SRC sh :dir /sudo::
