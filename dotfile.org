@@ -474,7 +474,7 @@
   autorun = true
   autorunApps = 
     { 
-      "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
+      -- "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
     }
 
   if autorun then
@@ -746,6 +746,8 @@
   # ~/.bash_profile
   #
 
+  # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
+
   # NO BEEP
   setterm -blength 0
 
@@ -781,6 +783,9 @@
   export XMODIFIERS="@im=fcitx"
   export LANG=zh_CN.UTF-8
   fcitx
+
+  # RUN emacs --daemon
+  ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon &
 
   # 屏幕保护程序
   # xscreensaver &
