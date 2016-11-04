@@ -769,8 +769,10 @@
   alias ls='ls --color=auto'
   PS1='[\u@\h \W]\$ '
 
+  LOG_FILE=/tmp/info.log
+  ERR_FILE=/tmp/error.log
   if [ -d ~/bin/autoload ];then
-      source ~/bin/autoload/*
+      source ~/bin/autoload/* >$LOG_FILE 2>$ERR_FILE
   fi
 #+END_SRC
 * X相关配置
