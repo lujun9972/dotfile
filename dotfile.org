@@ -769,7 +769,9 @@
   alias ls='ls --color=auto'
   PS1='[\u@\h \W]\$ '
 
-
+  if [ -d ~/bin/autoload ];then
+      source ~/bin/autoload/*
+  fi
 #+END_SRC
 * X相关配置
 ** xinitrc
