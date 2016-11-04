@@ -118,7 +118,7 @@
                               { "Eshell", "eshell.sh"},
                               { "dired", "dired.sh" },
                               { "Firefox", "firefox" },
-                              { "open terminal", "tilda" }
+                              { "open terminal", "terminator" }
                                     }
                           })
 
