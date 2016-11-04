@@ -95,6 +95,11 @@
      git config --global diff.tool ediff
      git config --global difftool.ediff.cmd "~/bin/ediff.sh \"\$LOCAL\" \"\$REMOTE\""
      git config --global difftool.prompt false
+     # 配置merge工具
+     git config --global merge.tool ediff
+     git config --global mergetool.ediff.cmd "~/bin/ediff_merge.sh \"$BASE\" \"\$LOCAL\" \"\$REMOTE\" \"$MERGED\""
+     git config --global mergetool.prompt false
+     # git config --global mergetool.ediff.trustExitCode true
    #+END_SRC
 
    #+RESULTS:
@@ -151,12 +156,14 @@
      exec awesome
    #+END_SRC
 
-4. 配置
-   从 https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中tangle出awesomeWm的配置文件.
-
 4. 安装archlinux-xdg-menu
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S archlinux-xdg-menu
+   #+END_SRC
+
+5. 生成awesome menu
+   #+BEGIN_SRC sh 
+     xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
    #+END_SRC
 * 声音配置
 Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer（所属包：alsa-utils） 取消静音：
@@ -197,11 +204,6 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S mpv
    #+END_SRC
-* mpg123
-#+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S mpg123
-#+END_SRC
-
 * 坚果云
 1. 安装依赖package
    #+BEGIN_SRC sh :dir /sudo::
