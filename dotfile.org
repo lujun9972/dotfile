@@ -24,6 +24,17 @@
   local naughty = require("naughty")
   local menubar = require("menubar")
 
+  -- 自定义寒酸
+  local function file_exist_p (file)
+    local f = io.open(file)
+    if f ~= nil then
+      io.close(f)
+      return true
+    else
+      return nil
+    end
+  end
+
   -- {{{ Error handling
   -- Check if awesome encountered an error during startup and fell back to
   -- another config (This code will only ever execute for the fallback config)
