@@ -507,26 +507,28 @@ Key bindings
 
 Rules
 #+BEGIN_SRC lua
-  -- Rules to apply to new clients (through the "manage" signal).
-  awful.rules.rules = {
-    -- All clients will match this rule.
-    { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
-                     focus = awful.client.focus.filter,
-                     raise = true,
-                     keys = clientkeys,
-                     buttons = clientbuttons } },
-    { rule = { class = "MPlayer" },
-      properties = { floating = true } },
-    { rule = { class = "pinentry" },
-      properties = { floating = true } },
-    { rule = { class = "gimp" },
-      properties = { floating = true } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
-  }
+    -- Rules to apply to new clients (through the "manage" signal).
+    awful.rules.rules = {
+      -- All clients will match this rule.
+      { rule = { },
+        properties = { border_width = beautiful.border_width,
+                       border_color = beautiful.border_normal,
+                       focus = awful.client.focus.filter,
+                       raise = true,
+                       keys = clientkeys,
+                       buttons = clientbuttons } },
+      { rule = { class = "MPlayer" },
+        properties = { floating = true } },
+      { rule = { class = "pinentry" },
+        properties = { floating = true } },
+      { rule = { class = "gimp" },
+        properties = { floating = true } },
+      { rule = { class = "Firefox" },
+        properties = { floating = true } }
+      -- Set Firefox to always map on tags number 2 of screen 1.
+      -- { rule = { class = "Firefox" },
+      --   properties = { tag = tags[1][2] } },
+    }
 #+END_SRC
 
 Signals
@@ -891,6 +893,13 @@ Signals
   [[ -f ~/.bashrc ]] && . ~/.bashrc
   export PATH=~/bin:$PATH
 
+  # Auto load scripts in ~/bin/autoload
+  LOG_FILE=/tmp/info.log
+  ERR_FILE=/tmp/error.log
+  if [ -d ~/bin/autoload ];then
+      source ~/bin/autoload/* >$LOG_FILE 2>$ERR_FILE
+  fi
+
   # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
   [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] && exec startx
 #+END_SRC
@@ -905,12 +914,6 @@ Signals
   alias "vi=vim"
   alias ls='ls --color=auto'
   PS1='[\u@\h \W]\$ '
-
-  LOG_FILE=/tmp/info.log
-  ERR_FILE=/tmp/error.log
-  if [ -d ~/bin/autoload ];then
-      source ~/bin/autoload/* >$LOG_FILE 2>$ERR_FILE
-  fi
 #+END_SRC
 * X相关配置
 ** xinitrc
