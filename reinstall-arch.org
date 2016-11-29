@@ -224,6 +224,18 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
      ./runtime_bootstrap
    #+END_SRC
 
+* 添加Archlinux CN 镜像源
+#+BEGIN_SRC sh :dir /sudo::
+  cat >>/etc/pacman.conf <<EOF
+  [archlinuxcn]
+  SigLevel = Optional TrustedOnly
+  Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
+  EOF
+
+  pacman -Syyu
+  pacman --noconfirm -S archlinuxcn-keyring 
+#+END_SRC
+
 * 恢复配置
 我用Emacs的org-mode来管理dotfile. 
 
