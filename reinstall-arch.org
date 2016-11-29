@@ -232,9 +232,11 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
   Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
   EOF
 
-  pacman -Syyu
+  pacman -Syy
   pacman --noconfirm -S archlinuxcn-keyring 
 #+END_SRC
+
+#+RESULTS:
 
 * 恢复配置
 我用Emacs的org-mode来管理dotfile. 
