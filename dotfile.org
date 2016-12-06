@@ -901,7 +901,7 @@ Signals
   fi
 
   # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
-  [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] && exec startx
+  # [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] && exec startx
 #+END_SRC
 ** bashrc
 #+BEGIN_SRC sh :tangle "~/.bashrc"
