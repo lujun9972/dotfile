@@ -900,8 +900,18 @@ Signals
       source ~/bin/autoload/* >$LOG_FILE 2>$ERR_FILE
   fi
 
-  # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
-  # [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] && exec startx
+  function command_exist_p()
+  {
+      which $1 >/dev/null 2>/dev/null
+  }
+
+  if command_exist_p fbterm && command_exist_p fcitx-fbterm ;then
+      # 启动fbterm
+      fbterm -i fcitx-fbterm
+  else
+      # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
+      [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] && exec startx
+  fi
 #+END_SRC
 ** bashrc
 #+BEGIN_SRC sh :tangle "~/.bashrc"
