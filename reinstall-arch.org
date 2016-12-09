@@ -185,11 +185,6 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
      pacman --noconfirm -S rox
    #+END_SRC
 * 多媒体
-** mp3播放
-1. mpg123
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S mpg123
-   #+END_SRC
 ** 看图工具
 1. feh
    #+BEGIN_SRC  sh :dir /sudo::
@@ -238,17 +233,29 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
 
 #+RESULTS:
 
-* fbterm支持终端环境中文处理
+* 
+** fbterm支持终端环境中文处理
 #+BEGIN_SRC sh :dir /sudo:: :var YOUR_USERNAME=(user-login-name)
   pacman --noconfirm -S fbterm libx86
   # 若想使用非根用户运行fbterm，需要把用户加入video组
   gpasswd -a $YOUR_USERNAME video
   # 若想非根用户可使用键盘快捷方式，需要：
-  # sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
-  # 或者：
-  chmod u+s /usr/bin/fbterm
+  sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 #+END_SRC
 
+
+** mpg123
+ #+BEGIN_SRC sh :dir /sudo::
+   pacman --noconfirm -S mpg123
+ #+END_SRC
+** moc
+ #+BEGIN_SRC sh :dir /sudo::
+   pacman --noconfirm -S moc
+ #+END_SRC
+** w3m
+#+BEGIN_SRC sh :dir /sudo::
+   pacman --noconfirm -S w3m imlib2
+#+END_SRC
 
 * 恢复配置
 我用Emacs的org-mode来管理dotfile. 
