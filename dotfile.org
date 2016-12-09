@@ -907,6 +907,7 @@ Signals
 
   if command_exist_p fbterm && command_exist_p fcitx-fbterm ;then
       # 启动fbterm
+      fcitx-fbterm-helper -l
       fbterm -i fcitx-fbterm
   else
       # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
