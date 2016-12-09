@@ -238,6 +238,18 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
 
 #+RESULTS:
 
+* fbterm支持终端环境中文处理
+#+BEGIN_SRC sh :dir /sudo:: :var YOUR_USERNAME=(user-login-name)
+  pacman --noconfirm -S fbterm libx86
+  # 若想使用非根用户运行fbterm，需要把用户加入video组
+  gpasswd -a $YOUR_USERNAME video
+  # 若想非根用户可使用键盘快捷方式，需要：
+  # sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
+  # 或者：
+  chmod u+s /usr/bin/fbterm
+#+END_SRC
+
+
 * 恢复配置
 我用Emacs的org-mode来管理dotfile. 
 
