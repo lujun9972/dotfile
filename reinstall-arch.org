@@ -234,14 +234,29 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
 #+RESULTS:
 
 * 终端环境下的工具 
-** fbterm支持终端环境中文处理
-#+BEGIN_SRC sh :dir /sudo:: :var YOUR_USERNAME=(user-login-name)
-  pacman --noconfirm -S fbterm libx86
-  # 若想使用非根用户运行fbterm，需要把用户加入video组
-  gpasswd -a $YOUR_USERNAME video
-  # 若想非根用户可使用键盘快捷方式，需要：
-  sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
-#+END_SRC
+** 配置中文环境
+1. fbterm支持终端环境中文处理
+   #+BEGIN_SRC sh :dir /sudo:: :var YOUR_USERNAME=(user-login-name)
+     pacman --noconfirm -S fbterm libx86
+     # 若想使用非根用户运行fbterm，需要把用户加入video组
+     gpasswd -a $YOUR_USERNAME video
+     # 若想非根用户可使用键盘快捷方式，需要：
+     sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
+   #+END_SRC
+2. 使用fcitx-fbterm作为中文输入法
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S fcitx-fbterm
+   #+END_SRC
+     安装好后，可以通过 =fcitx-fbterm-helper -l= 启动中文输入法
+3. 安装framebuffer下的X server
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S xorg-server-xvfb xf86-video-fbdev
+   #+END_SRC
+4. framebuffer设置工具
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S fbset
+   #+END_SRC
+   
 
 ** 播放音乐
 *** mpg123
@@ -252,6 +267,17 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
  #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S moc
  #+END_SRC
+
+** 播放视频
+1. mplalyer
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S mplayer
+   #+END_SRC
+
+   mplayer可以在fbterm下播放视频，但需要指明输出设备是fbdev2
+   #+BEGIN_SRC sh  :var MEDIA_FILE=(read-file-name "选择要播放的视频：")
+     mplayer -vo fbdev2 $MEDIA_FILE
+   #+END_SRC
 ** w3m浏览网页
 #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S w3m imlib2
