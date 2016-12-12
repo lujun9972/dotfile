@@ -243,7 +243,7 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
   sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 #+END_SRC
 
-** 播放音乐
+** 媒体播放
 *** mpg123
  #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S mpg123
@@ -276,11 +276,15 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S calcurse
    #+END_SRC
+     
+   关于calcurse的用法,推荐阅读 [[https://linux.cn/article-4853-1.html][在 Linux 终端下使用 calcurse 安排约会和待办事项]]
 
 2. remind+wyrd
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S remind wyrd
    #+END_SRC
+
+3. Emacs+Org
      
 ** RSS & podcaster
 1. newsbeuter
