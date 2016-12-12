@@ -252,6 +252,40 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
  #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S moc
  #+END_SRC
+*** mplayer
+安装mplayer
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S mplayer
+#+END_SRC
+
+mplayer支持在终端环境下播放影片,但是需要指明输出驱动:
+#+BEGIN_SRC sh :var MEDIA_FILE=(read-file-name "请选择要播放的视频")
+  mplayer -vo fbdev2 $MEDIA_FILE
+#+END_SRC
+
+mplayer在播放时支持以下快捷键:
+
++ 左方向键和右方向键 :: 分别执行倒退 10 秒和快进 10 秒操作
++ 下方向键和上方向键 :: 分别执行倒退 1 分钟和快进 1 分钟操作
++ 下翻页键和上翻页键 :: 分别执行倒退 10 分钟和快进 10 分钟操作
++ f :: 当播放视频时，在全屏和窗口模式之间切换。你也可以在命令行中使用 -fs 选项，以便让 MPlayer 开始在全屏模式中播放。
++ o :: 在播放视频时切换 OSD（OnScreen Display）模式。
++ p 或 Space :: 暂停／继续播放。
++ q 或 Esc :: 退出 MPlayer。在 GUI 模式时，Esc 不会退出，仅停止播放。
++ / 和 * 或 9 和 0 :: 减小或增大音量。
++ m :: 静音切换。
++ T（通常是 Shift + t） :: 播放窗口置顶切换。
++ b 和 j :: 在可用的字幕间循环。
++ x 和 z :: 调整字幕的延迟时间。
++ I（Shift + i） :: 显示播放电影的文件名称。
++ 1 和 2 :: 调整对比度。
++ 3 和 4 :: 调整亮度。
++ 5 和 6 :: 调整色度。
++ 7 和 8 :: 调整饱和度
+
+更多的mplayer操作参见 [[https://linuxtoy.org/archives/playing-around-with-mplayer.html][玩转 MPlayer]]
+
+*** Emacs+EMMS
 ** w3m浏览网页
 #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S w3m imlib2
@@ -291,12 +325,18 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S newsbeuter
    #+END_SRC
+   
+   关于newsbeuter的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
 
+2. Emacs+elfeed+podcaster
 ** 查看PDF
 1. fbida
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S fbida
    #+END_SRC
+
+   #+RESULTS:
+
 ** 查看图片
 1. fbv
    #+BEGIN_SRC sh :dir /sudo::
@@ -307,6 +347,8 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S fbida
    #+END_SRC
+
+   #+RESULTS:
 
 ** IM工具
 1. finch
