@@ -251,7 +251,7 @@ Menu
                               { "Eshell", "eshell.sh"},
                               { "dired", "dired.sh" },
                               { "Firefox", "firefox" },
-                              { "open terminal", "terminator" }
+                              { "open terminal", terminal }
   }
                          })
 
