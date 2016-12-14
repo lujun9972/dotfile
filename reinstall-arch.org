@@ -329,19 +329,12 @@ mplayer在播放时支持以下快捷键:
    关于newsbeuter的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
 
 2. Emacs+elfeed+podcaster
-** 查看PDF
+** 查看PDF,图片
 1. fbida
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S fbida
    #+END_SRC
 
-   #+RESULTS:
-
-** 查看图片
-1. fbv
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S fbv
-   #+END_SRC
 ** 截图工具
 1. fbgrab
    #+BEGIN_SRC sh :dir /sudo::
