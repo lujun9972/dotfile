@@ -338,7 +338,7 @@ mplayer在播放时支持以下快捷键:
 | /     | Next FM         | 下一FM             |
 | Q     | Quit            | 退出               |
 | W     | Quit&Clear      | 退出并清除用户信息 |
-*** Emacs+EMMS
+*** Emacs+EMMS+wangyi-music
 ** w3m浏览网页
 #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S w3m imlib2
