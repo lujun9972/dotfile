@@ -299,8 +299,46 @@ mplayer在播放时支持以下快捷键:
 + 7 和 8 :: 调整饱和度
 
 更多的mplayer操作参见 [[https://linuxtoy.org/archives/playing-around-with-mplayer.html][玩转 MPlayer]]
-
-*** Emacs+EMMS
+*** musicbox
+高品质网易云音乐命令行版本，简洁优雅，丝般顺滑，基于Python编写。
+#+BEGIN_SRC sh
+  pacman -S --noconfirm netease-musicbox-git
+#+END_SRC
+#+NAME: 键盘快捷键
+| J     | Down            | 下移               |
+| K     | Up              | 上移               |
+| H     | Back            | 后退               |
+| L     | Forword         | 前进               |
+| U     | Prev page       | 上一页             |
+| D     | Next page       | 下一页             |
+| F     | Search          | 快速搜索           |
+| [     | Prev song       | 上一曲             |
+| ]     | Next song       | 下一曲             |
+| =     | Volume +        | 音量增加           |
+| -     | Volume -        | 音量减少           |
+| Space | Play/Pause      | 播放/暂停          |
+| ?     | Shuffle         | 手气不错           |
+| M     | Menu            | 主菜单             |
+| P     | Present/History | 当前/历史播放列表  |
+| I     | Music Info      | 当前音乐信息       |
+| ⇧+P   | Playing Mode    | 播放模式切换       |
+| A     | Add             | 添加曲目到打碟     |
+| ⇧+A   | Enter album     | 进入专辑           |
+| G     | To the first    | 跳至首项           |
+| ⇧+G   | To the end      | 跳至尾项           |
+| Z     | DJ list         | 打碟列表           |
+| S     | Star            | 添加到收藏         |
+| C     | Collection      | 收藏列表           |
+| R     | Remove          | 删除当前条目       |
+| ⇧+J   | Move Down       | 向下移动当前项目   |
+| ⇧+K   | Move Up         | 向上移动当前项目   |
+| ⇧+C   | Cache           | 缓存歌曲到本地     |
+| ,     | Like            | 喜爱               |
+| .     | Trash FM        | 删除 FM            |
+| /     | Next FM         | 下一FM             |
+| Q     | Quit            | 退出               |
+| W     | Quit&Clear      | 退出并清除用户信息 |
+*** Emacs+EMMS+wangyi-music
 ** w3m浏览网页
 #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S w3m imlib2
