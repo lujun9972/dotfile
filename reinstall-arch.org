@@ -380,7 +380,7 @@ mplayer在播放时支持以下快捷键:
      pacman --noconfirm -S remind wyrd
    #+END_SRC
 
-3. Emacs+Org
+3. Emacs+Org+diary
      
 ** RSS & podcaster
 1. newsbeuter
@@ -420,7 +420,7 @@ mplayer在播放时支持以下快捷键:
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S nethack
    #+END_SRC
-
+     
 ** 有趣的工具
 1. pv
    
