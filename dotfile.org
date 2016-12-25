@@ -950,6 +950,35 @@ Signals
   # xmodmap -e "keysym XF86WakeUp = Super_R"
   exec awesome
 #+END_SRC
+** Xdefaults
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  XTerm*metaSendsEscape:  true
+  XTerm*eightBitInput:    false
+
+  XTerm*Font:       7x13
+
+  xterm*faceName: DejaVu Sans Mono:style=Book:antialias=false:size=10
+  xterm*faceNameDoublesize: WenQuanYi Micro Hei Mono:size=10
+  xterm*faceSize: 8
+
+  XTerm*locale: zh_CN.UTF-8
+  xterm*utf8: true
+  xterm*utf8Title: true
+
+  XTerm*scrollBar:  true
+
+  XTerm*rightScrollBar:  true
+
+  XTerm*saveLines:  4096
+
+  xterm*bellIsUrgent: true
+
+  XTerm*scaleHeight: 1.01
+
+  xterm*borderWidth: 0
+
+#+END_SRC
+
 * 将Caps_Ctrl换成Win键
 对于X41这种不带Win键，但是awesome没有Win键是很难用的。可以按照下面步骤来将Caps_Lock换成Win键
 
