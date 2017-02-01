@@ -65,6 +65,18 @@
      usermod -a -G wheel lujun9972
    #+END_SRC
 
+* 添加Archlinux CN 镜像源
+#+BEGIN_SRC sh :dir /sudo::
+  cat >>/etc/pacman.conf <<EOF
+  [archlinuxcn]
+  SigLevel = Optional TrustedOnly
+  Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
+  EOF
+
+  pacman -Syy
+  pacman --noconfirm -S archlinuxcn-keyring 
+#+END_SRC
+
 * 配置中文输入法
 
 1. 安装fictx
@@ -136,6 +148,7 @@
 ** 安装
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S shadowsocks
+  pacman --noconfirm -S shadowsocks-qt5
 #+END_SRC
 
 * 窗口管理器
@@ -218,20 +231,6 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
      make install
      ./runtime_bootstrap
    #+END_SRC
-
-* 添加Archlinux CN 镜像源
-#+BEGIN_SRC sh :dir /sudo::
-  cat >>/etc/pacman.conf <<EOF
-  [archlinuxcn]
-  SigLevel = Optional TrustedOnly
-  Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
-  EOF
-
-  pacman -Syy
-  pacman --noconfirm -S archlinuxcn-keyring 
-#+END_SRC
-
-#+RESULTS:
 
 * 终端环境下的工具 
 ** 配置中文环境
