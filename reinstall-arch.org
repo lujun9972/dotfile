@@ -213,25 +213,18 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
      pacman --noconfirm -S mpv
    #+END_SRC
 * 坚果云
-1. 安装依赖package
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S glib2 gtk2 libnautilus-extension gvfs jre8-openjdk wget
+     pacman --noconfirm -S nutstore
+   #+END_SRC
+* zeal
+   #+BEGIN_SRC shell :dir /sudo::
+     pacman --noconfirm -S zeal
    #+END_SRC
 
-2. 下载源代码
-   #+BEGIN_SRC sh  :dir /sudo::
-     curl http://www.jianguoyun.com/static/exe/installer/nutstore_linux_src_installer.tar.gz -o nutstore_linux_src_installer.tar.gz
+* wps
+   #+BEGIN_SRC shell :dir /sudo::
+     pacman --noconfirm -S wps-office ttf-wps-fonts
    #+END_SRC
-
-3. 解压，编译, 安装插件
-   #+BEGIN_SRC sh :dir /sudo::
-     tar zxf nutstore_linux_src_installer.tar.gz
-     cd nutstore_linux_src_installer
-     ./configure && make
-     make install
-     ./runtime_bootstrap
-   #+END_SRC
-
 * 终端环境下的工具 
 ** 配置中文环境
 1. fbterm支持终端环境中文处理
