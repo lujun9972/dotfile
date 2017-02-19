@@ -148,6 +148,10 @@
      mv ~/.emacs.d ~/emacs.d
      git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
    #+END_SRC
+3. spacemacs的python layer需要安装virtualenvwrapper
+   #+BEGIN_SRC shell :dir /sudo::
+     pacman --noconfirm -S python-virtualenvwrapper
+   #+END_SRC
 
 * Socketsock
 ** 安装
