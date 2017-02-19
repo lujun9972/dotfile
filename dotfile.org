@@ -598,7 +598,7 @@
   autorun = true
   autorunApps = 
     { 
-      -- "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
+      "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
     }
 
   if autorun then
@@ -883,7 +883,10 @@
   LOG_FILE=/tmp/info.log
   ERR_FILE=/tmp/error.log
   if [ -d ~/bin/autoload ];then
-      source ~/bin/autoload/* >$LOG_FILE 2>$ERR_FILE
+      for f in $(ls ~/bin/autoload)
+      do
+          source ~/bin/autoload/$f >>$LOG_FILE 2>>$ERR_FILE
+      done
   fi
 
   function command_exist_p()
@@ -926,7 +929,7 @@
   fcitx
 
   # RUN emacs --daemon
-  ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon &
+  # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon &
 
   # 屏幕保护程序
   # xscreensaver &
