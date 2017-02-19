@@ -931,6 +931,9 @@
   # RUN emacs --daemon
   # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon &
 
+  # 坚果云
+  nutstore &
+
   # 屏幕保护程序
   # xscreensaver &
 
