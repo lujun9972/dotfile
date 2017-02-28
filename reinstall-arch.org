@@ -122,13 +122,18 @@
      pacman --noconfirm -S git
    #+END_SRC
 
-2. 生成公钥
+2. 自动启动sshd服务
+   #+BEGIN_SRC shell :dir /sudo::
+     systemctl enable sshd.service
+   #+END_SRC
+
+3. 生成公钥
    #+BEGIN_SRC sh
      ssh-keygen -y
      cat .ssh/id_rsa.pub
    #+END_SRC
 
-3. 将公钥内容放到 [[https://www.github.com][github]] 中
+4. 将公钥内容放到 [[https://www.github.com][github]] 中
 
 * Emacs
 1. 安装Emacs
@@ -142,6 +147,10 @@
      git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
      mv ~/.emacs.d ~/emacs.d
      git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+   #+END_SRC
+3. spacemacs的python layer需要安装virtualenvwrapper
+   #+BEGIN_SRC shell :dir /sudo::
+     pacman --noconfirm -S python-virtualenvwrapper
    #+END_SRC
 
 * Socketsock
