@@ -873,8 +873,10 @@
 
   # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
 
-  # NO BEEP
-  setterm -blength 0
+  if shopt -q login_shell;then
+      # NO BEEP
+      setterm -blength 0
+  fi
 
   [[ -f ~/.bashrc ]] && . ~/.bashrc
   export PATH=~/bin:$PATH
