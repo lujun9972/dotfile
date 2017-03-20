@@ -893,7 +893,7 @@
 
   function command_exist_p()
   {
-      which $1 >/dev/null 2>/dev/null
+      command -v "$@" >/dev/null 2>/dev/null
   }
 
   if command_exist_p fbterm && command_exist_p fcitx-fbterm ;then
