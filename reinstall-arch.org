@@ -76,6 +76,11 @@
   pacman -Syy
   pacman --noconfirm -S archlinuxcn-keyring 
 #+END_SRC
+* AUR
+安装yaourt
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S yaourt
+#+END_SRC
 
 * 配置中文输入法
 
@@ -115,7 +120,11 @@
    #+END_SRC
 
    #+RESULTS:
-
+* pandoc
+1. 安装pandoc
+   #+BEGIN_SRC sh :dir /sudo::
+     pacman --noconfirm -S pandoc
+   #+END_SRC
 * openssh
 1. 安装openssh
    #+BEGIN_SRC sh :dir /sudo::
@@ -258,7 +267,7 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
      pacman --noconfirm -S fcitx-fbterm
    #+END_SRC
      安装好后，可以通过 =fcitx-fbterm-helper -l= 启动中文输入法
-3. 安装framebuffer下的X server
+3. 安装framebuffer下的虚拟X server
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S xorg-server-xvfb xf86-video-fbdev
    #+END_SRC
@@ -355,9 +364,9 @@ mplayer在播放时支持以下快捷键:
 #+END_SRC
 ** ledger基于终端的帐务管理软件
 #+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S ledger
+  yaourt --noconfirm -S ledger
 #+END_SRC
-** 种子下载
+** 下载
 1. rtorrent
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S rtorrent
@@ -401,10 +410,8 @@ mplayer在播放时支持以下快捷键:
 ** 截图工具
 1. fbgrab
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S fbida
+     pacman --noconfirm -S fbgrab
    #+END_SRC
-
-   #+RESULTS:
 
 ** IM工具
 1. finch
@@ -422,6 +429,10 @@ mplayer在播放时支持以下快捷键:
      pacman --noconfirm -S nethack
    #+END_SRC
      
+** 讲稿演示
+ #+BEGIN_SRC shell :dir /sudo::
+   yaourt --noconfirm -S tpp
+ #+END_SRC
 ** 有趣的工具
 1. pv
    
