@@ -401,18 +401,43 @@ mplayer在播放时支持以下快捷键:
    关于newsbeuter的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
 
 2. Emacs+elfeed+podcaster
-** 查看PDF,图片
-1. fbida
+** 查看PDF,图片:fbida
+1. 安装
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S fbida
    #+END_SRC
 
-** 截图工具
-1. fbgrab
+2. 用法
+
+   + 使用fbi查看图片
+
+   + 使用fbpdf查看pdf
+
+** 截图工具:fbgrab
+1. 安装
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S fbgrab
    #+END_SRC
 
+2. 用法
+   fbgrab会抓取frambuffer device中的屏幕内容并转存为png文件. 
+   它的使用方法也很简单:
+   #+BEGIN_SRC shell
+     fbgrab [options] filename
+   #+END_SRC
+     
+   其中常见的选项有:
+   
+   + -s n :: 等待n秒后再开始抓图
+
+   + -b bitdepth :: 指定抓取像素的色彩位数
+
+   + -h height :: 指定抓取的高度,以像素为单位.
+
+   + -w width :: 指定抓取的宽度,以像素为单位.
+
+   + -z :: 设定png文件的压缩等级,从0(最快)到9(压缩效果最好)
+           
 ** IM工具
 1. finch
 
