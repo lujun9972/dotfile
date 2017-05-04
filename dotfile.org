@@ -7,10 +7,7 @@
 
 * 窗口管理器配置
 ** AwesomeWM
-:PROPERTIES:
-:tangle:  ~/.config/awesome/rc.lua
-:END:
-#+BEGIN_SRC lua
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- Standard awesome library
   local gears = require("gears")
   local awful = require("awful")
@@ -590,8 +587,8 @@
       end
   end)
 
-  client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-  client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+  -- client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+  -- client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
   -- }}}
 
   -- Autorun programs
