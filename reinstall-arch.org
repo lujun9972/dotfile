@@ -66,7 +66,7 @@
    #+END_SRC
 
 * 添加Archlinux CN 镜像源
-#+BEGIN_SRC sh :dir /sudo::
+#+BEGIN_SRC shell :dir /sudo::
   cat >>/etc/pacman.conf <<EOF
   [archlinuxcn]
   SigLevel = Optional TrustedOnly
@@ -136,6 +136,8 @@
      systemctl enable sshd.service
    #+END_SRC
 
+   #+RESULTS:
+
 3. 生成公钥
    #+BEGIN_SRC sh
      ssh-keygen -y
@@ -154,7 +156,7 @@
      git clone git@github.com:lujun9972/bin.git ~/bin
      git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
      git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
-     mv ~/.emacs.d ~/emacs.d
+     mv ~/.emacs.d ~/emacs.d.bak
      git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
    #+END_SRC
 3. spacemacs的python layer需要安装virtualenvwrapper
@@ -162,7 +164,7 @@
      pacman --noconfirm -S python-virtualenvwrapper
    #+END_SRC
 
-* Socketsock
+* ShadowSocks
 ** 安装
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S shadowsocks
@@ -194,8 +196,11 @@
 
 5. 生成awesome menu
    #+BEGIN_SRC sh 
+     mkdir -p ~/.config/awesome/
      xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
    #+END_SRC
+
+
 * 声音配置
 Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer（所属包：alsa-utils） 取消静音：
 #+BEGIN_SRC sh
@@ -382,7 +387,7 @@ mplayer在播放时支持以下快捷键:
 
 2. aria2
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S aria2
+     pacman --noconfirm -S aria2 aria2-fast
    #+END_SRC
 
 ** 日历系统
