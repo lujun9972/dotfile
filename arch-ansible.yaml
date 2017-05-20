@@ -12,12 +12,13 @@
       command: "echo '%wheel ALL=(ALL) ALL'>> /etc/sudoers"
 
     - name: 添加Archlinux CN 镜像源
-      command: '
+      shell: '
       cat >>/etc/pacman.conf <<EOF
       [archlinuxcn]
       SigLevel = Optional TrustedOnly
       Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
       EOF'
+    - name: 安装archlinuxcn-keyring
       pacman: name=archlinuxcn-keyring state=latest update_cache=yes
 
     - name: 安装必要软件
@@ -53,17 +54,24 @@
         - nutstore
         - zeal
 
-    - name: 安装终端工具
-      # 安装fbterm
-      command: "yaourt -S fbterm libx86"
-      user: name=lujun9972 groups=video append=yes
-      command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
-      # 使用fcitx-fbterm作为中文输入法
-      git: accept-hostkey=yes depth=1 dest=/tmp repo=https://github.com/fcitx/fcitx-fbterm
-      shell: mkdir -p build && cd build && cmake .. && make && make install
+    - name: 安装fbterm支持中文显示
+      command: yaourt -S fbterm libx86
       args:
-        chdir: /tmp/fcitx-fbterm
-      # 安装其他frambuffer工具
+        creates: /usr/bin/fbterm
+    - name: 设置用户组
+      user: name=lujun9972 groups=video append=yes
+    - name: 设置fbterm权限
+      command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
+
+      # 使用fcitx-fbterm作为中文输入法
+    - name: clone fcitx-fbterm
+      git: accept-hostkey=yes depth=1 dest=/tmp repo=https://github.com/fcitx/fcitx-fbterm
+    - name: install fcitx-fbterm
+      shell: cd /tmp/fcitx-fbterm && mkdir -p build && cd build && cmake .. && make && make install
+      args:
+        creates: /usr/local/bin/fcitx-fbterm-helper
+
+    - name: 安装其他frambuffer工具
       pacman: "name={{item}} state=latest"
       with_items:
         - xorg-server-xvfb
@@ -111,9 +119,13 @@
         - option: mergetool.prompt
           value: false
 
-    - name: 配置openssh
+    - name: 启动sshd
       systemd: name=sshd.service enabled=yes state=started
+
+    - name: 生成私钥文件
       command: ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
+      args:
+        creates: ~/.ssh/id_rsa
 
     - name: Read SSH public key to authorize
       shell: cat ~/.sshd/id_rsa.pub
