@@ -4,12 +4,19 @@
 # - 配置网络
 # - 安装ansible 
 - hosts: localhost
+  pre_tasks:
+    - name: 更新pacman缓存
+      pacman: update_cache=yes 
   tasks:
     - name:  配置用户
       user: name=lujun9972 groups=wheel shell=/bin/bash
 
     - name: 配置sudo,让wheel组的用户能够suduo
       command: "echo '%wheel ALL=(ALL) ALL'>> /etc/sudoers"
+
+    - name: 查看/etc/pacman.conf配置
+      command: cat /etc/pacman.conf
+      register: pacman_conf
 
     - name: 添加Archlinux CN 镜像源
       shell: '
@@ -18,8 +25,9 @@
       SigLevel = Optional TrustedOnly
       Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
       EOF'
+      when: "pacman_conf.stdout.find('archlinuxcn') == -1"
     - name: 安装archlinuxcn-keyring
-      pacman: name=archlinuxcn-keyring state=latest update_cache=yes
+      pacman: name=archlinuxcn-keyring state=latest
 
     - name: 安装必要软件
       pacman: "name={{item}} state=latest"
