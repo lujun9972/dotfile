@@ -900,9 +900,8 @@
       # 启动fbterm
       fcitx-fbterm-helper -l
       # fbterm -i fcitx-fbterm
-  else
-      # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
-      [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] && exec startx
+  elif [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 ] # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
+      exec startx
   fi
 #+END_SRC
 ** bashrc

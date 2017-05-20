@@ -1,0 +1,147 @@
+---
+
+# 前提条件:
+# - 配置网络
+# - 安装ansible 
+-hosts: localhost
+tasks:
+  -name:  配置用户
+  user: name=lujun9972 groups=wheel shell=/bin/bash
+
+  -name: 配置sudo,让wheel组的用户能够suduo
+  command: "echo '%wheel ALL=(ALL) ALL'>> /etc/sudoers"
+
+  -name: 添加Archlinux CN 镜像源
+  command: '
+  cat >>/etc/pacman.conf <<EOF
+  [archlinuxcn]
+  SigLevel = Optional TrustedOnly
+  Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
+  EOF'
+  pacman: name=archlinuxcn-keyring state=latest update_cache=yes
+
+  -name: 安装必要软件
+  pacman: "name={{item}} state=latest"
+  with_items:
+    - yaourt
+    - fcitx-im
+    - fcitx-configtool
+    - fcitx-sunpinyin
+    - git
+    - openssh
+    - pandoc
+    - emacs
+    - shadowsocks
+    - alsa-utils
+    - wps-office
+    - ttf-wps-fonts
+    - smplayer
+    - mpg123
+
+  -name: 安装图形环境
+  pacman: "name={{item}} state=latest"
+  with_items:
+    - xorg
+    - xorg-server
+    - xorg-server-utils
+    - xorg-xinit
+    - ttf-dejavu
+    - wqy-microhei
+    - awesome
+    - archlinux-xdg-menu
+    - shadowsocks-qt5
+    - nutstore
+    - zeal
+
+  -name: 安装终端工具
+  # 安装fbterm
+  command: "yaourt -S fbterm libx86"
+  user: name=lujun9972 groups=video append=yes
+  command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
+  # 使用fcitx-fbterm作为中文输入法
+  git: accept-hostkey=yes depth=1 dest=/tmp repo=https://github.com/fcitx/fcitx-fbterm
+  shell: mkdir -p build && cd build && cmake .. && make && make install
+  args:
+    chdir: /tmp/fcitx-fbterm
+    # 安装其他frambuffer工具
+  pacman: "name={{item}} state=latest"
+  with_items:
+    - xorg-server-xvfb
+    - xf86-video-fbdev
+    - fbset
+    - moc
+    - netease-musicbox-git
+    - cmus
+    - w3m
+    - imlib2
+    - aria2
+   # 关于newsbeuter的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
+    - newsbeuter
+    - fbida
+    - fbgrab
+
+  -name: 安装其他可选软件
+  pacman: "name={{item}} state=latest"
+  with_items:
+    - terminator
+    - rox
+    - feh
+    - sxiv
+    - mpv
+
+  -name: 配置git
+  git_config: "scope=global name={{item.option}} value={{item.value}}"
+  with_items:
+    - option: user.email
+      value: "lujun9972@gmail.com"
+    - option: user.name
+      value: "darksun"
+    - option: core.quotepath
+      value: false
+    - option: diff.tool
+      value: ediff
+    - option: difftool.ediff.cmd
+      value: '~/bin/ediff.sh \"\$LOCAL\" \"\$REMOTE\"'
+    - option: difftool.prompt
+      value: false
+    - option: merge.tool
+      value: ediff
+    - option: mergetool.ediff.cmd
+      value:  '~/bin/ediff_merge.sh \"$BASE\" \"\$LOCAL\" \"\$REMOTE\" \"$MERGED\"'
+    - option: mergetool.prompt
+      value: false
+
+  -name: 配置openssh
+  systemd: name=sshd.service enabled=yes state=started
+  command: ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
+
+  -name: Read SSH public key to authorize
+  shell: cat ~/.sshd/id_rsa.pub
+  register: ssh_pub_key
+
+  -name: Authorize key with Github
+  github_key: name=test token={{github_access_token}} pubkey={{ssh_pub_key.stdout}}
+
+
+
+# * Emacs
+# 2. 安装配置
+#    #+BEGIN_SRC sh
+#      git clone git@github.com:lujun9972/bin.git ~/bin
+#      git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
+#      git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
+#      mv ~/.emacs.d ~/emacs.d
+#      git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+#    #+END_SRC
+# 3. spacemacs的python layer需要安装virtualenvwrapper
+#    #+BEGIN_SRC shell :dir /sudo::
+#      pacman --noconfirm -S python-virtualenvwrapper
+#    #+END_SRC
+
+
+
+
+# 5. 生成awesome menu
+#    #+BEGIN_SRC sh 
+#      xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
+#    #+END_SRC
