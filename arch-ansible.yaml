@@ -8,16 +8,25 @@
     - name:  配置用户
       user: name=lujun9972 groups=wheel shell=/bin/bash
 
+    #- name: set password for lujun9972
+    #  var_prompt:
+    #    - name: user_pwd
+    #      prompt: "set the password for lujun9972:"
+    #      private: yes 
+    #  command: passwd lujn9972
+
     - name: 配置sudo,让wheel组的用户能够suduo
-      command: "echo '%wheel ALL=(ALL) ALL'>> /etc/sudoers"
+      lineinfile:
+        path: /etc/sudoers
+        line: '%wheel ALL=(ALL) ALL'
 
     - name: 添加Archlinux CN 镜像源
-      shell: '
-      cat >>/etc/pacman.conf <<EOF
-      [archlinuxcn]
-      SigLevel = Optional TrustedOnly
-      Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
-      EOF'
+      blockinfile:
+        path: /etc/pacman.conf
+        block: |
+          [archlinuxcn]
+          SigLevel = Optional TrustedOnly
+          Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
     - name: 安装archlinuxcn-keyring
       pacman: name=archlinuxcn-keyring state=latest update_cache=yes
 
@@ -38,13 +47,13 @@
         - ttf-wps-fonts
         - smplayer
         - mpg123
+        - cmake
 
     - name: 安装图形环境
       pacman: "name={{item}} state=latest"
       with_items:
         - xorg
-        - xorg-server
-        - xorg-server-utils
+        #- xorg-server
         - xorg-xinit
         - ttf-dejavu
         - wqy-microhei
@@ -54,18 +63,20 @@
         - nutstore
         - zeal
 
-    - name: 安装fbterm支持中文显示
-      command: yaourt -S fbterm libx86
-      args:
-        creates: /usr/bin/fbterm
-    - name: 设置用户组
-      user: name=lujun9972 groups=video append=yes
-    - name: 设置fbterm权限
-      command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
+    #- name: 安装fbterm支持中文显示
+    #  sudo_user: lujun9972
+    #  sudo: yes
+    #  command: yaourt -S --noconfirm fbterm-git libx86
+    #  args:
+    #    creates: /usr/bin/fbterm
+    #- name: 设置用户组
+    #  user: name=lujun9972 groups=video append=yes
+    #- name: 设置fbterm权限
+    #  command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
 
       # 使用fcitx-fbterm作为中文输入法
     - name: clone fcitx-fbterm
-      git: accept-hostkey=yes depth=1 dest=/tmp repo=https://github.com/fcitx/fcitx-fbterm
+      git: accept_hostkey=yes depth=1 dest=/tmp/fcitx-fbterm repo=https://github.com/fcitx/fcitx-fbterm
     - name: install fcitx-fbterm
       shell: cd /tmp/fcitx-fbterm && mkdir -p build && cd build && cmake .. && make && make install
       args:
@@ -98,6 +109,8 @@
         - mpv
 
     - name: 配置git
+      sudo_user: lujun9972
+      sudo: yes
       git_config: "scope=global name={{item.option}} value={{item.value}}"
       with_items:
         - option: user.email
@@ -123,13 +136,15 @@
       systemd: name=sshd.service enabled=yes state=started
 
     - name: 生成私钥文件
-      command: ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
-      args:
-        creates: ~/.ssh/id_rsa
+      sudo_user: lujun9972
+      sudo: yes
+      block:
+        - shell: ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
+          args:
+            creates: ~/.ssh/id_rsa
 
-    - name: Read SSH public key to authorize
-      shell: cat ~/.sshd/id_rsa.pub
-      register: ssh_pub_key
+        - shell: cat ~/.ssh/id_rsa.pub
+          register: ssh_pub_key
 
     # - name: Authorize key with Github
     #   github_key: name=test token={{github_access_token}} pubkey={{ssh_pub_key.stdout}}
