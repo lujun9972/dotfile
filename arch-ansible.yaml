@@ -7,9 +7,11 @@
   pre_tasks:
     - name: 更新pacman缓存
       pacman: update_cache=yes 
+  vars:
+    - user: lujun9972
   tasks:
     - name:  配置用户
-      user: name=lujun9972 groups=wheel shell=/bin/bash
+      user: name=lujun9972 groups=wheel shell=/bin/bash append=yes
 
     #- name: set password for lujun9972
     #  var_prompt:
@@ -50,8 +52,6 @@
         - emacs
         - shadowsocks
         - alsa-utils
-        - wps-office
-        - ttf-wps-fonts
         - smplayer
         - mpg123
         - cmake
@@ -67,12 +67,20 @@
         - awesome
         - archlinux-xdg-menu
         - shadowsocks-qt5
-        - nutstore
         - zeal
+        - ttf-wps-fonts
+
+    - name: 安装64位独有软件
+      pacman: "name={{item}} state=latest"
+      with_items:
+        - wps-office
+        - nutstore
+      when: "ansible_userspace_bits == '64'"
+
 
     #- name: 安装fbterm支持中文显示
-    #  sudo_user: lujun9972
-    #  sudo: yes
+    #  become_user: lujun9972
+    #  become: yes
     #  command: yaourt -S --noconfirm fbterm-git libx86
     #  args:
     #    creates: /usr/bin/fbterm
@@ -81,13 +89,12 @@
     #- name: 设置fbterm权限
     #  command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
 
-      # 使用fcitx-fbterm作为中文输入法
-    - name: clone fcitx-fbterm
-      git: accept_hostkey=yes depth=1 dest=/tmp/fcitx-fbterm repo=https://github.com/fcitx/fcitx-fbterm
-    - name: install fcitx-fbterm
-      shell: cd /tmp/fcitx-fbterm && mkdir -p build && cd build && cmake .. && make && make install
-      args:
-        creates: /usr/local/bin/fcitx-fbterm-helper
+    - name: 使用fcitx-fbterm作为中文输入法
+      block:
+        - git: accept_hostkey=yes depth=1 dest=/tmp/fcitx-fbterm repo=https://github.com/fcitx/fcitx-fbterm
+        - shell: cd /tmp/fcitx-fbterm && mkdir -p build && cd build && cmake .. && make && make install
+          args:
+            creates: /usr/local/bin/fcitx-fbterm-helper
 
     - name: 安装其他frambuffer工具
       pacman: "name={{item}} state=latest"
@@ -116,8 +123,8 @@
         - mpv
 
     - name: 配置git
-      sudo_user: lujun9972
-      sudo: yes
+      become_user: lujun9972
+      become: yes
       git_config: "scope=global name={{item.option}} value={{item.value}}"
       with_items:
         - option: user.email
@@ -143,8 +150,8 @@
       systemd: name=sshd.service enabled=yes state=started
 
     - name: 生成私钥文件
-      sudo_user: lujun9972
-      sudo: yes
+      become_user: lujun9972
+      become: yes
       block:
         - shell: ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
           args:
@@ -156,26 +163,21 @@
     # - name: Authorize key with Github
     #   github_key: name=test token={{github_access_token}} pubkey={{ssh_pub_key.stdout}}
 
+    - name: 生成awesome menu
+      become_user: lujun9972
+      become: yes
+      block:
+        - file: path=~/.config/awesome state=directory
+        - shell: xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
 
-
-# * Emacs
-# 2. 安装配置
-#    #+BEGIN_SRC sh
-#      git clone git@github.com:lujun9972/bin.git ~/bin
-#      git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
-#      git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
-#      mv ~/.emacs.d ~/emacs.d
-#      git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
-#    #+END_SRC
-# 3. spacemacs的python layer需要安装virtualenvwrapper
-#    #+BEGIN_SRC shell :dir /sudo::
-#      pacman --noconfirm -S python-virtualenvwrapper
-#    #+END_SRC
-
-
-
-
-# 5. 生成awesome menu
-#    #+BEGIN_SRC sh 
-#      xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
-#    #+END_SRC
+    - name: 配置Emacs
+      become_user: lujun9972
+      become: yes
+      block:
+        - git: accept_hostkey=yes dest=~/bin repo=git@github.com:lujun9972/bin.git
+        - git: accept_hostkey=yes dest=~/MyLisp repo=git@github.com:lujun9972/MyLisp.git
+        - git: accept_hostkey=yes dest=~/.spacemacs.d repo=git@github.com:lujun9972/.spacemacs.d.git
+        - shell: mv ~/.emacs.d ~/emacs.d
+        - git: accept_hostkey=yes dest=~/.emacs.d repo=https://github.com/syl20bnr/spacemacs
+          # spacemacs的python layer需要安装virtualenvwrapper
+        - pacman: name=python-virtualenvwrapper state=latest
