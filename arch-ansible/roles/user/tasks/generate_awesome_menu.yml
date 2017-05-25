@@ -1,0 +1,7 @@
+---
+- name: 生成awesome menu
+  become_user: "{{user_name}}"
+  become: yes
+  block:
+    - file: path=~/.config/awesome state=directory
+    - shell: xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua

@@ -1,0 +1,15 @@
+---
+- name: 安装图形环境
+  pacman: "name={{item}} state=latest"
+  with_items:
+    - xorg
+    - xorg-xinit
+    - xterm
+    - ttf-dejavu
+    - wqy-microhei
+    - awesome
+    - archlinux-xdg-menu
+    - shadowsocks-qt5
+    - zeal
+    - ttf-wps-fonts
+    - firefox

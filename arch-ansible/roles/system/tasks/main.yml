@@ -1,0 +1,9 @@
+---
+- include: add_archlinuxcn.yml
+- include: install_basic_packages.yml
+- include: install_gui_packages.yml
+- include: install_64bit_packages.yml
+- include: install_cli_packages.yml
+- include: install_optional_packages.yml
+- include: set_sudo.yml
+- include: config_service.yml

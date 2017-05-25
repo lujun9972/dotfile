@@ -1,0 +1,24 @@
+---
+- name: 配置git
+  become_user: "{{user_name}}"
+  become: yes
+  git_config: "scope=global name={{item.option}} value={{item.value}}"
+  with_items:
+    - option: user.email
+      value: "lujun9972@gmail.com"
+    - option: user.name
+      value: "darksun"
+    - option: core.quotepath
+      value: false
+    - option: diff.tool
+      value: ediff
+    - option: difftool.ediff.cmd
+      value: '~/bin/ediff.sh \"\$LOCAL\" \"\$REMOTE\"'
+    - option: difftool.prompt
+      value: false
+    - option: merge.tool
+      value: ediff
+    - option: mergetool.ediff.cmd
+      value:  '~/bin/ediff_merge.sh \"$BASE\" \"\$LOCAL\" \"\$REMOTE\" \"$MERGED\"'
+    - option: mergetool.prompt
+      value: false

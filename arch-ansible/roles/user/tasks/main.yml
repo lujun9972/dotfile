@@ -1,0 +1,7 @@
+---
+- include: add_user.yml
+- include: config_git.yml
+- include: authorize_github_key.yml
+- include: generate_awesome_menu.yml
+- include: config_emacs.yml
+- include: recover_config.yml

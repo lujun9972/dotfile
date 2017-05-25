@@ -1,0 +1,13 @@
+---
+- name: download configurations dotfile
+  become_user: "{{user_name}}"
+  become: yes
+  get_url: dest=/tmp/dotfile.org url=https://raw.githubusercontent.com/lujun9972/dotfile/master/dotfile.org force=yes
+  tags: configuration
+
+- name: recover configurations
+  become_user: "{{user_name}}"
+  become: yes
+  shell: "emacs  /tmp/dotfile.org --eval \"(call-interactively #'org-babel-tangle)\""
+  tags: configuration
+

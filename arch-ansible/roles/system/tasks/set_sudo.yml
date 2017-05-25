@@ -1,0 +1,5 @@
+---
+- name: 配置sudo,让wheel组的用户能够suduo
+  lineinfile:
+    path: /etc/sudoers
+    line: '%wheel ALL=(ALL) ALL'

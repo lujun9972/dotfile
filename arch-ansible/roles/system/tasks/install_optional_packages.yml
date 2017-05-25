@@ -1,0 +1,9 @@
+---
+- name: 安装其他可选软件
+  pacman: "name={{item}} state=latest"
+  with_items:
+    - terminator
+    - rox
+    - feh
+    - sxiv
+    - mpv

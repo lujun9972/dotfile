@@ -1,0 +1,9 @@
+---
+- name: Authorize key with Github
+  become_user: "{{user_name}}"
+  become: yes
+  block:
+    - shell: cat ~/.ssh/id_rsa.pub
+      register: ssh_pub_key
+    - github_key: name=test token={{github_access_token}} pubkey={{ssh_pub_key.stdout}}
+  tags: github

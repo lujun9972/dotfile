@@ -1,0 +1,15 @@
+---
+- name: 配置Emacs
+  become_user: "{{user_name}}"
+  become: yes
+  block:
+    - git: accept_hostkey=yes dest=~/bin repo=git@github.com:lujun9972/bin.git
+    - git: accept_hostkey=yes dest=~/MyLisp repo=git@github.com:lujun9972/MyLisp.git
+    - git: accept_hostkey=yes dest=~/.spacemacs.d repo=git@github.com:lujun9972/.spacemacs.d.git
+    # - shell: mv ~/.emacs.d ~/emacs.d
+    - git: accept_hostkey=yes dest=~/.emacs.d repo=https://github.com/syl20bnr/spacemacs
+  tags: emacs
+
+- name: spacemacs的python layer需要安装virtualenvwrapper
+  pacman: name=python-virtualenvwrapper state=latest
+  tags: emacs

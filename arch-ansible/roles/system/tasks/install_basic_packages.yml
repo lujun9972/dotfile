@@ -1,0 +1,19 @@
+---
+- name: 安装必要软件
+  pacman: "name={{item}} state=latest"
+  with_items:
+    - yaourt
+    - fcitx-im
+    - fcitx-configtool
+    - fcitx-sunpinyin
+    - git
+    - openssh
+    - pandoc
+    - emacs
+    - shadowsocks
+    - alsa-utils
+    - smplayer
+    - mpg123
+    - cmake
+    - vim
+    - jdk8-openjdk

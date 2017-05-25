@@ -1,0 +1,10 @@
+---
+- name: 添加Archlinux CN 镜像源
+  blockinfile:
+    path: /etc/pacman.conf
+    block: |
+      [archlinuxcn]
+      SigLevel = Optional TrustedOnly
+      Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+- name: 安装archlinuxcn-keyring
+  pacman: name=archlinuxcn-keyring state=latest

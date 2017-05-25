@@ -1,0 +1,3 @@
+---
+- name: 启动sshd
+  systemd: name=sshd.service enabled=yes state=started
