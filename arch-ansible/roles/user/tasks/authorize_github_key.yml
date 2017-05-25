@@ -5,5 +5,5 @@
   block:
     - shell: cat ~/.ssh/id_rsa.pub
       register: ssh_pub_key
-    - github_key: name=test token={{github_access_token}} pubkey={{ssh_pub_key.stdout}}
+    - github_key: name={{ansible_hostname}} token={{github_access_token}} pubkey={{ssh_pub_key.stdout}}
   tags: github
