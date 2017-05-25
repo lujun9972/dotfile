@@ -1,0 +1,9 @@
+---
+- name: 安装AUR中的package
+  command: "yaourt -S --noconfirm {{item.name}} state=latest"
+  args:
+    creates: "{{item.object}}"
+  with_items:
+    - name: "anki20-bin"
+      object: "/usr/bin/anki"
+  tags: aur,package
