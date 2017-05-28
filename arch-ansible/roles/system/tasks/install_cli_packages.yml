@@ -6,12 +6,10 @@
     - git: accept_hostkey=yes depth=1 dest=/tmp/fbterm repo=https://github.com/lujun9972/fbterm
     - shell: cd /tmp/fbterm && ./configure && make && make install
       args:
-        creates: /usr/bin/fbterm
+        creates: /usr/local/bin/fbterm
   tags: fbterm package
-- name: 设置用户组
-  user: name=lujun9972 groups=video append=yes
 - name: 设置fbterm权限
-  command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
+  command: "setcap 'cap_sys_tty_config+ep' /usr/local/bin/fbterm"
 
 
 - name: 使用fcitx-fbterm作为中文输入法
