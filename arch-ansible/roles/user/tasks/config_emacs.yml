@@ -11,5 +11,7 @@
   tags: emacs
 
 - name: spacemacs的python layer需要安装virtualenvwrapper
+  become_user: root
+  become: yes
   pacman: name=python-virtualenvwrapper state=latest
   tags: emacs

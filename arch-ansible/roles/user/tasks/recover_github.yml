@@ -1,0 +1,8 @@
+---
+- name: 还原github仓库
+  become_user: "{{user_name}}"
+  become: yes
+  block:
+    - git: accept_hostkey=yes dest=~/我的笔记 repo=git@github.com:lujun9972/-.git
+    - git: accept_hostkey=yes dest=~/我的GTD repo=git@github.com:lujun9972/DTG.git
+  tags: github_repo
