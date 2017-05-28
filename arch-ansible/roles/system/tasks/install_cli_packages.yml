@@ -1,14 +1,18 @@
 ---
 - name: 安装fbterm支持中文显示
-  become_user: lujun9972
+  become_user: root
   become: yes
-  command: yaourt -S --noconfirm fbterm-git libx86
-  args:
-    creates: /usr/bin/fbterm
+  block:
+    - git: accept_hostkey=yes depth=1 dest=/tmp/fbterm repo=https://github.com/lujun9972/fbterm
+    - shell: cd /tmp/fbterm && ./configure && make && make install
+      args:
+        creates: /usr/bin/fbterm
+  tags: fbterm package
 - name: 设置用户组
   user: name=lujun9972 groups=video append=yes
 - name: 设置fbterm权限
   command: "setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm"
+
 
 - name: 使用fcitx-fbterm作为中文输入法
   block:
