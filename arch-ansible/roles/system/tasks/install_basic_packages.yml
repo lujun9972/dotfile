@@ -17,3 +17,6 @@
     - cmake
     - vim
     - jdk8-openjdk
+    - udisks2
+    - udiskie
+    - unrar
