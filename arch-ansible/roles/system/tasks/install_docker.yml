@@ -1,0 +1,6 @@
+---
+- name: 安装docker并启用docker服务
+  block:
+    - pacman: "name=docker state=latest"
+    - service: "name=docker enabled=yes state=started"
+  tags: docker
