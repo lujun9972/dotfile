@@ -7,4 +7,4 @@
       SigLevel = Optional TrustedOnly
       Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
 - name: 安装archlinuxcn-keyring
-  pacman: name=archlinuxcn-keyring state=latest
+  pacman: name=archlinuxcn-keyring state=latest update_cache=yes

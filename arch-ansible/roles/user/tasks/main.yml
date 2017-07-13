@@ -5,5 +5,5 @@
 - include: authorize_github_key.yml
 - include: generate_awesome_menu.yml
 - include: config_emacs.yml
-- include: recover_config.yml
 - include: recover_github.yml
+- include: recover_config.yml

@@ -3,7 +3,7 @@
   become_user: root
   become: yes
   block:
-    - git: accept_hostkey=yes depth=1 dest=/tmp/fbterm repo=https://github.com/lujun9972/fbterm
+    - git: accept_hostkey=yes depth=1 dest=/tmp/fbterm repo=https://github.com/lujun9972/fbterm force=yes
     - shell: cd /tmp/fbterm && ./configure && make && make install
       args:
         creates: /usr/local/bin/fbterm

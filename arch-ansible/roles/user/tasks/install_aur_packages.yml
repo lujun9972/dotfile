@@ -1,6 +1,8 @@
 ---
 - name: 安装AUR中的package
-  command: "yaourt -S --noconfirm {{item.name}} state=latest"
+  become_user: "{{user_name}}"
+  become: yes
+  command: "yaourt -S --noconfirm {{item.name}}"
   args:
     creates: "{{item.object}}"
   with_items:
