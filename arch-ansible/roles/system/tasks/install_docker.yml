@@ -3,4 +3,5 @@
   block:
     - pacman: "name=docker state=latest"
     - service: "name=docker enabled=yes state=started"
+    - shell: "curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://31d9bf6d.m.daocloud.io"
   tags: docker
