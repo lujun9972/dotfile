@@ -944,8 +944,17 @@
   # RUN emacs --daemon
   # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || emacs --daemon &
 
+
   # 坚果云
-  nutstore &
+  if which nutstore ;then
+     nutstore &
+  fi
+
+  # 自动挂载udisk
+  if which udiskie;then
+      udiskie &
+  fi
+
 
   # 屏幕保护程序
   # xscreensaver &
