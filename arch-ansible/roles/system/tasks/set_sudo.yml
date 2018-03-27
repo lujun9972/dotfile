@@ -3,3 +3,8 @@
   lineinfile:
     path: /etc/sudoers
     line: '%wheel ALL=(ALL) ALL'
+
+- name: 配置sudoer,配置sudo日志
+  lineinfile:
+    path: /etc/sudoers
+    line: 'Defaults     logfile=/var/log/sudo.log'
