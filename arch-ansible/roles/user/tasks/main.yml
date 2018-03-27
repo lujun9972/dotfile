@@ -1,6 +1,6 @@
 ---
 - include: add_user.yml
-- include: install_aur_packages.yml
+  #- include: install_aur_packages.yml
 - include: config_git.yml
 - include: authorize_github_key.yml
 - include: generate_awesome_menu.yml
