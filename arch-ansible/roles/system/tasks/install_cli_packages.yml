@@ -32,7 +32,7 @@
     - imlib2
     - aria2
     # 关于newsbeuter的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
-    - newsbeuter
+    #- newsbeuter
     - fbida
-    - fbgrab
+    - fbcat
     - antiword

@@ -8,6 +8,6 @@
 - name: recover configurations
   become_user: "{{user_name}}"
   become: yes
-  shell: "emacs  /tmp/dotfile.org --eval \"(call-interactively #'org-babel-tangle)\""
+  shell: "emacs --batch  /tmp/dotfile.org --eval \"(call-interactively #'org-babel-tangle)\""
   tags: configuration
 

@@ -3,5 +3,6 @@
   pacman: "name={{item}} state=latest"
   with_items:
     - wps-office
+    - ttf-wps-fonts
     - nutstore
   when: "ansible_userspace_bits == '64'"
