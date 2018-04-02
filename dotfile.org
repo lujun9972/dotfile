@@ -800,9 +800,13 @@
     "Start Firefox or switch to it, if it is already running."
     (my-run-or-raise "iceweasel" '(:class "Iceweasel")))
 
+  ;; (defcommand file-manager () ()
+  ;;   "Start nautilus"
+  ;;   (my-run-or-raise "nautilus --no-desktop" '(:class "Nautilus")))
+
   (defcommand file-manager () ()
-    "Start nautilus"
-    (my-run-or-raise "nautilus --no-desktop" '(:class "Nautilus")))
+    "Start rox"
+    (my-run-or-raise "rox" '(:class "FileManager")))
 
   (defcommand foxit () ()
     (launch-crossover-app "FoxitReader" "FoxitReader"))
@@ -840,7 +844,7 @@
   (defkey-root "M-x" "colon")
   (defkey-top "s-RET" "exec x-terminal-emulator")
   (defkey-root "f" "file-manager")
- 
+
   ;; 定义声音
   (define-key *top-map* (kbd "XF86AudioLowerVolume") "amixer-Front-1-")
   (define-key *top-map* (kbd "XF86AudioRaiseVolume") "amixer-Front-1+")
