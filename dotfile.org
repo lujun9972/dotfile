@@ -317,6 +317,8 @@
       -- Standard program
       awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
                 {description = "open a terminal", group = "launcher"}),
+      awful.key({ modkey,  "Shift" }, "f", function () awful.spawn("rox") end,
+                {description = "open a file manager", group = "launcher"}),
       awful.key({ modkey, "Control" }, "r", awesome.restart,
                 {description = "reload awesome", group = "awesome"}),
       awful.key({ modkey, "Shift"   }, "q", awesome.quit,
@@ -1069,6 +1071,11 @@ colorn: colour
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
   URxvt.saveLines:  4096
 #+END_SRC
+**** 设置termname
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.termName:  xterm-256color
+#+END_SRC
+
 **** 启用perl-ext
 需要安装urxvt-perls
 #+BEGIN_SRC shell :sudo::
