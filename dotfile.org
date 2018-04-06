@@ -977,11 +977,12 @@
   exec awesome
 #+END_SRC
 ** Xdefaults
+*** 配置Xterm
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
   XTerm*metaSendsEscape:  true
   XTerm*eightBitInput:    false
 
-  XTerm*Font:       7x13
+  XTerm*Font:       9x15
 
   xterm*faceName: DejaVu Sans Mono:style=Book:antialias=false:size=10
   xterm*faceNameDoublesize: WenQuanYi Micro Hei Mono:size=10
@@ -1003,6 +1004,29 @@
 
   xterm*borderWidth: 0
 
+#+END_SRC
+*** 配置rxvt-unicode
+**** 设置字体
+The complete list of short names for X core fonts can be found in /usr/share/fonts/misc/fonts.alias
+
+Other fonts can be used through Xft using the following format:
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.font: 9x15
+  ! URxvt.font: -misc-fixed-bold-r-normal--15-140-75-75-c-90-iso8859-1
+  ! URxvt.font: xft:monaco:bold:size=10
+#+END_SRC
+**** 设置背景色，前景色
+colorn: colour
+           Use the specified colour for the colour value n, where 0-7
+           corresponds to low-intensity (normal) colours and 8-15 corresponds
+           to high-intensity (bold = bright foreground, blink = bright
+           background) colours. The canonical names are as follows: 0=black,
+           1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan, 7=white, but
+           the actual colour names used are listed in the COLOURS AND GRAPHICS
+           section.
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.foreground:white
+  URxvt.background:black
 #+END_SRC
 
 * 将Caps_Ctrl换成Win键
