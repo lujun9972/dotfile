@@ -64,7 +64,7 @@
   -- beautiful.init("~/.config/awesome/theme.lua")
 
   -- This is used later as the default terminal and editor to run.
-  terminal = "terminator"
+  terminal = "urxvt"
   editor = os.getenv("EDITOR") or "vi"
   editor_cmd = terminal .. " -e " .. editor
   emacsclient_newframe = "emacsclient -a \"\" -n -c "
@@ -982,6 +982,7 @@
   XTerm*metaSendsEscape:  true
   XTerm*eightBitInput:    false
 
+  XTerm*geometry: 80x30
   XTerm*Font:       9x15
 
   xterm*faceName: DejaVu Sans Mono:style=Book:antialias=false:size=10
@@ -1006,14 +1007,20 @@
 
 #+END_SRC
 *** 配置rxvt-unicode
+**** 设置窗口大小
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.geometry: 80x30
+#+END_SRC
 **** 设置字体
 The complete list of short names for X core fonts can be found in /usr/share/fonts/misc/fonts.alias
 
 Other fonts can be used through Xft using the following format:
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
-  URxvt.font: 9x15
+  ! URxvt.font: 9x15
   ! URxvt.font: -misc-fixed-bold-r-normal--15-140-75-75-c-90-iso8859-1
   ! URxvt.font: xft:monaco:bold:size=10
+  URxvt.font: xft:DejaVu Sans Mono:pixelsize=15:foundry=PfEd:weight=normal:slant=normal:width=normal:spacing=100:scalable=true
+
 #+END_SRC
 **** 设置背景色，前景色
 colorn: colour
@@ -1027,15 +1034,59 @@ colorn: colour
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
   URxvt.foreground:white
   URxvt.background:black
+  URxvt.colorBD:yellow
+  URxvt.colorUL:Green
+  URxvt.color0: #000000
+  URxvt.color1: #CC0000
+  URxvt.color2: #4E9A06
+  URxvt.color3: #C4A000
+  URxvt.color4: #3465A4
+  URxvt.color5: #75507B
+  URxvt.color6: #06989A
+  URxvt.color7: #D3D7CF
+  URxvt.color8: #555753
+  URxvt.color9: #EF2929
+  URxvt.color10: #8AE234
+  URxvt.color11: #FCE94F
+  URxvt.color12: #729FCF
+  URxvt.color13: #AD7FA8
+  URxvt.color14: #34E2E2
+  URxvt.color15: #EEEEEC
+#+END_SRC
+**** 设置桌面背景透明
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.transparent:  false
+  ! URxvt.tintCddolor: white
+  ! URxvt.shading: 80
+
 #+END_SRC
 **** 设置滚动条在右边
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.scrollBar: true
   URxvt.scrollBar_right:  true
 #+END_SRC
 **** 设置保存的行数
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
   URxvt.saveLines:  4096
 #+END_SRC
+**** 启用perl-ext
+需要安装urxvt-perls
+#+BEGIN_SRC shell :sudo::
+  sudo pacman -S urxvt-perls --noconfirm
+#+END_SRC
+
+urxvt打开多标签功能。
+urxvt的标签支持使用鼠标操作，同时可以使用Shift+左右箭头来切换标签页，使 用Shift+向下箭头开启新标签。
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.perl-ext-common: default,tabbed,matcher
+#+END_SRC
+
+通过在urxvt中的链接上点击鼠标左键来通过设定的浏览器打开之
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.urlLauncher: firefox
+  URxvt.matcher.button: 1
+#+END_SRC
+
 * 将Caps_Ctrl换成Win键
 对于X41这种不带Win键，但是awesome没有Win键是很难用的。可以按照下面步骤来将Caps_Lock换成Win键
 
