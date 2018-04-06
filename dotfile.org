@@ -1028,7 +1028,14 @@ colorn: colour
   URxvt.foreground:white
   URxvt.background:black
 #+END_SRC
-
+**** 设置滚动条在右边
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.scrollBar_right:  true
+#+END_SRC
+**** 设置保存的行数
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.saveLines:  4096
+#+END_SRC
 * 将Caps_Ctrl换成Win键
 对于X41这种不带Win键，但是awesome没有Win键是很难用的。可以按照下面步骤来将Caps_Lock换成Win键
 
