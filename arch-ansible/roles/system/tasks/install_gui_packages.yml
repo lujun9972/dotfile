@@ -5,6 +5,8 @@
     - xorg
     - xorg-xinit
     - xterm
+    - rxvt-unicode
+    - urxvt-perls
     - ttf-dejavu
     - wqy-microhei
     - awesome
