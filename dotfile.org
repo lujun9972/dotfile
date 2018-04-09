@@ -1062,6 +1062,10 @@ colorn: colour
   ! URxvt.shading: 80
 
 #+END_SRC
+**** 设置输入法
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  ! URxvt.inputMethod: iBus
+#+END_SRC
 **** 设置滚动条在右边
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
   URxvt.scrollBar: true
