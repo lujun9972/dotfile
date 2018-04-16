@@ -1057,9 +1057,9 @@ colorn: colour
 #+END_SRC
 **** 设置桌面背景透明
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
-  URxvt.transparent:  false
-  ! URxvt.tintCddolor: white
-  ! URxvt.shading: 80
+  URxvt.transparent:  true
+  URxvt.tintCddolor: white
+  URxvt.shading: 10
 
 #+END_SRC
 **** 设置输入法

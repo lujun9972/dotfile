@@ -17,5 +17,7 @@
     - flashplugin
     - mplayer
     - smplayer
-    - xpdf
+    - zathura
+    - zathura-pdf-mupdf
+    - scrot
     - anki
