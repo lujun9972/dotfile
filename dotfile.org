@@ -969,7 +969,8 @@
       udiskie &
   fi
 
-
+  # 自动运行redshift
+  redshift &
   # 屏幕保护程序
   # xscreensaver &
 
@@ -1105,4 +1106,24 @@ urxvt的标签支持使用鼠标操作，同时可以使用Shift+左右箭头来
   xmapmode -pke > ~/.Xmodmap
   echo "remove Lock = Caps_Lock" >> ~/.Xmodmap
   echo "keysym Caps_Lock = Super_R" >> ~/.Xmodmap
+#+END_SRC
+* redshift配置
+
+#+BEGIN_SRC conf :tangle "~/.config/redshift.conf"
+  [redshift]
+  ; 设置色温
+  temp-day=5500
+  temp-night=3500
+
+  ; 渐进地改变色温
+  transition=1
+
+  adjustment-method=randr
+
+  ; 手工指定经纬度
+  location-provider=manual
+
+  [manual]
+  lat=23.12
+  lon=113.25
 #+END_SRC
