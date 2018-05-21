@@ -218,7 +218,7 @@
       set_wallpaper(s)
 
       -- Each screen has its own tag table.
-      awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+      awful.tag({ "1.HOME", "2.STUDIO", "3.GAMES", "4.EDIT", "5.VM", "6.IRC", "7", "8", "9" }, s, awful.layout.layouts[1])
 
       -- Create a promptbox for each screen
       s.mypromptbox = awful.widget.prompt()
@@ -497,6 +497,8 @@
         properties = { floating = true } },
       { rule = { class = "Firefox" },
         properties = { floating = true } },
+      { rule = { class = "VirtualBox" },
+        properties = { tag=awful.tag[5] } },
       -- Set Firefox to always map on tags number 2 of screen 1.
       -- { rule = { class = "Firefox" },
       --   properties = { tag = tags[1][2] } },
@@ -1090,14 +1092,31 @@ colorn: colour
 urxvt打开多标签功能。
 urxvt的标签支持使用鼠标操作，同时可以使用Shift+左右箭头来切换标签页，使 用Shift+向下箭头开启新标签。
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
-  URxvt.perl-ext-common: default,tabbed,matcher
+  URxvt.perl-ext-common: default,tabbed,resize-font,matcher,url-select,keyboard-select
 #+END_SRC
 
 通过在urxvt中的链接上点击鼠标左键来通过设定的浏览器打开之
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
-  URxvt.urlLauncher: firefox
+  URxvt.url-launcher: /usr/bin/xdg-open
   URxvt.matcher.button: 1
 #+END_SRC
+
+url-select/keyboard-select可以在屏幕中的内容之间用Vim键盘快速跳转,按下回车就能访问URL，按下y拷贝内容
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.keysym.M-u: perl:url-select:select_next
+  URxvt.url-select.launcher: /usr/bin/xdg-open
+  URxvt.keysym.M-Escape: perl:keyboard-select:activate
+#+END_SRC
+
+resize-font可以更改屏幕中字体大小,但是需要先安装 =urxvt-resize-font-git=
+#+BEGIN_SRC shell
+  yaourt -S urxvt-resize-font-git --noconfirm
+#+END_SRC
+#+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
+  URxvt.resize-font.smaller: C-j
+  URxvt.resize-font.bigger: C-k
+#+END_SRC
+
 
 * 将Caps_Ctrl换成Win键
 对于X41这种不带Win键，但是awesome没有Win键是很难用的。可以按照下面步骤来将Caps_Lock换成Win键
