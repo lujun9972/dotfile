@@ -972,7 +972,7 @@
   # 自动运行redshift
   redshift &
   # 屏幕保护程序
-  # xscreensaver &
+  xscreensaver &
 
   # xmodmap -e "remove Lock = Caps_Lock"
   # xmodmap -e "keysym Caps_Lock = Super_R"

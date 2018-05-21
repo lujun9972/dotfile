@@ -5,6 +5,7 @@
     - xorg
     - xorg-xinit
     - xterm
+    - xscreensaver
     - rxvt-unicode
     - urxvt-perls
     - redshift
