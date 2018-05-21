@@ -960,12 +960,12 @@
 
 
   # 坚果云
-  if which nutstore ;then
+  if command -v nutstore ;then
      nutstore &
   fi
 
   # 自动挂载udisk
-  if which udiskie;then
+  if command -v udiskie;then
       udiskie &
   fi
 
