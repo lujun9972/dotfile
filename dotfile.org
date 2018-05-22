@@ -500,9 +500,6 @@
       -- 这里class通过xprop程序来获取
       { rule = { class = "VirtualBox Manager" },
         properties = { tag="5.VM", switchtotag = true } },
-      -- Set Firefox to always map on tags number 2 of screen 1.
-      -- { rule = { class = "Firefox" },
-      --   properties = { tag = tags[1][2] } },
 
       -- Floating clients.
       { rule_any = {
@@ -535,9 +532,6 @@
         }, properties = { titlebars_enabled = true }
       },
 
-      -- Set Firefox to always map on the tag named "2" on screen 1.
-      -- { rule = { class = "Firefox" },
-      --   properties = { screen = 1, tag = "2" } },
   }
   -- }}}
 
