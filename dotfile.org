@@ -497,8 +497,9 @@
         properties = { floating = true } },
       { rule = { class = "Firefox" },
         properties = { floating = true } },
-      { rule = { class = "VirtualBox" },
-        properties = { tag=awful.tag[5] } },
+      -- 这里class通过xprop程序来获取
+      { rule = { class = "VirtualBox Manager" },
+        properties = { tag="5.VM", switchtotag = true } },
       -- Set Firefox to always map on tags number 2 of screen 1.
       -- { rule = { class = "Firefox" },
       --   properties = { tag = tags[1][2] } },
@@ -972,9 +973,15 @@
   fi
 
   # 自动运行redshift
-  redshift &
+  if command -v redshift;then
+      redshift &
+  fi
+
   # 屏幕保护程序
-  xscreensaver &
+
+  if command -v xscreensaver;then
+      xscreensaver &
+  fi
 
   # xmodmap -e "remove Lock = Caps_Lock"
   # xmodmap -e "keysym Caps_Lock = Super_R"
@@ -1112,6 +1119,9 @@ resize-font可以更改屏幕中字体大小,但是需要先安装 =urxvt-resize
 #+BEGIN_SRC shell
   yaourt -S urxvt-resize-font-git --noconfirm
 #+END_SRC
+
+#+RESULTS:
+
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
   URxvt.resize-font.smaller: C-j
   URxvt.resize-font.bigger: C-k
