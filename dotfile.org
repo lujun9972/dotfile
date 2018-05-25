@@ -7,6 +7,16 @@
 
 * 窗口管理器配置
 ** AwesomeWM
+*** 加载Awesome API library
+Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
+
++ gears :: 常用的工具
++ wibox :: Awesome的widget框架
++ awful :: window managment方面的功能
++ naughty :: 有关通知的功能
++ menubar :: XDG menu相关实现
++ beautiful :: Awesome主题相关的功能
+               
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- Standard awesome library
   local gears = require("gears")
@@ -22,7 +32,10 @@
   local hotkeys_popup = require("awful.hotkeys_popup").widget
   -- Enable VIM help for hotkeys widget when client with matching name is opened:
   require("awful.hotkeys_popup.keys.vim")
+#+END_SRC
 
+*** 自定义一些函数
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   function file_exist_p (file)
     local f = io.open(file)
     if f ~= nil then
@@ -33,7 +46,28 @@
     end
   end
 
-  -- {{{ Error handling
+  local function client_menu_toggle_fn()
+    local instance = nil
+
+    return function ()
+      if instance and instance.wibox.visible then
+        instance:hide()
+        instance = nil
+      else
+        instance = awful.menu.clients({ theme = { width = 250 } })
+      end
+    end
+  end
+#+END_SRC
+*** 错误处理
+错误可能会有以下几类：
+
++ 语法错误 :: 使用 =awesome -k= 来检查配置文件中是否存在语法错误
++ 动态语言类型错误 :: 可以使用 =luacheck= 来进行静态扫描
++ 废弃的API :: 若调用了废弃的API，则会在 =stderr= 和 =stdout= 中输出警告信息
+            
+=awesome.startup_errors= 中包含的是awesome启动期间的错误信息
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- Check if awesome encountered an error during startup and fell back to
   -- another config (This code will only ever execute for the fallback config)
   if awesome.startup_errors then
@@ -41,7 +75,13 @@
                        title = "Oops, there were errors during startup!",
                        text = awesome.startup_errors })
   end
+#+END_SRC
 
+=awesome.connect_signal(event,func)= 来注册当时间发生时调用哪个函数，其中
++ event为字符串形式的时间名称
++ func为触发调用的函数
+  
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- Handle runtime errors after startup
   do
       local in_error = false
@@ -56,26 +96,51 @@
           in_error = false
       end)
   end
-  -- }}}
+#+END_SRC
+*** 加载主题
+=beautiful.init(config)= 函数初始化主题
 
-  -- {{{ Variable definitions
+其中 =config= 可以是一个字符串路径指向主题文件(这个主题文件的执行结果应该是一个包含各类主题变量与值的table)，或者直接就是一个table对象
+
+使用 =beautiful.get()= 函数就能得到当前主题对象
+
+与设置主题相关的变量有：
+
++ font :: 默认的字体
++ useless_gap :: 程序与程序之间的间距大小，默认为0
++ border_width :: 程序边框宽度
++ border_normal :: 程序边框的默认宽度.
++ border_focus :: 焦点所在程序的边框框读
++ wallpaper :: 壁纸的路径
++ awesome_icon :: Awesome图标的路径
+
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- Themes define colours, icons, font and wallpapers.
   beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
   -- beautiful.init("~/.config/awesome/theme.lua")
-
+#+END_SRC
+*** 定义一些变量
+定义终端、默认编辑器
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   -- This is used later as the default terminal and editor to run.
   terminal = "urxvt"
   editor = os.getenv("EDITOR") or "vi"
   editor_cmd = terminal .. " -e " .. editor
   emacsclient_newframe = "emacsclient -a \"\" -n -c "
+#+END_SRC
 
+设置默认的modkey
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   -- Default modkey.
   -- Usually, Mod4 is the key with a logo between Control and Alt.
   -- If you do not like this or do not have such a key,
   -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
   -- However, you can use another modifier like Mod1, but it may interact with others.
   modkey = "Mod4"
+#+END_SRC
 
+定义可用的布局
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- Table of layouts to cover with awful.layout.inc, order matters.
   awful.layout.layouts = {
       awful.layout.suit.floating,
@@ -95,24 +160,12 @@
       -- awful.layout.suit.corner.sw,
       -- awful.layout.suit.corner.se,
   }
-  -- }}}
+#+END_SRC
+*** Menu
+自定义菜单，其中一个菜单就是一个包含菜单项的数组。
 
-  -- {{{ Helper functions
-  local function client_menu_toggle_fn()
-      local instance = nil
-
-      return function ()
-          if instance and instance.wibox.visible then
-              instance:hide()
-              instance = nil
-          else
-              instance = awful.menu.clients({ theme = { width = 250 } })
-          end
-      end
-  end
-  -- }}}
-
-  -- {{{ Menu
+而一个菜单项可以是：一个菜单或一个形如 ={菜单项名称,菜单项对应的函数或命令字符串[,菜单项图标]}=, 其中 =菜单项图标= 可以省略。
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- Create a launcher widget and a main menu
   myawesomemenu = {
      { "hotkeys", function() return false, hotkeys_popup.show_help end},
@@ -131,14 +184,17 @@
 
   -- 自动生成的xdg_menu
   xdg_menu = require("archmenu")
-
-  mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                              { "Applications", xdgmenu },
-                              { "Eshell", "eshell.sh"},
-                              { "dired", "dired.sh" },
-                              { "Firefox", "firefox" },
-                              { "open terminal", terminal }
+  mainmenu_items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+    { "Applications", xdgmenu },
+    { "Eshell", "eshell.sh"},
+    { "dired", "dired.sh" },
+    { "Firefox", "firefox" },
+    { "open terminal", terminal }
   }
+#+END_SRC
+
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  mymainmenu = awful.menu({ items = mainmenu_items
                           })
 
   mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
