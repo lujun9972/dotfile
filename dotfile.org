@@ -193,6 +193,7 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   }
 #+END_SRC
 
+awful.menu:new(args,parent)用于生成menu对象，其中
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   mymainmenu = awful.menu({ items = mainmenu_items
                           })
