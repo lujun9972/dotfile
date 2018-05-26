@@ -262,7 +262,7 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 
     -- 点击左键，切换到该tag
     awful.button({ }, 1, function(t) t:view_only() end), 
-    -- modkey+左键，将当前应用移动到指定tag
+    -- modkey+左键，将当前window移动到指定tag
     awful.button({ modkey }, 1, function(t)
         if client.focus then
           client.focus:move_to_tag(t)
@@ -270,7 +270,7 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
     end),
     -- 点击右键，让指定tag也可见
     awful.button({ }, 3, awful.tag.viewtoggle),
-    -- modkey+右键，让当前应用在指定tag也可见
+    -- modkey+右键，让当前window在指定tag也可见
     awful.button({ modkey }, 3, function(t)
         if client.focus then
           client.focus:toggle_tag(t)
@@ -400,7 +400,7 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 #+END_SRC
 **** 设置client鼠标操作
 
-client鼠标操作是当有应用获取到焦点时触发的操作，awesome将当前捕获到焦点的应用作为参数传递给对应的函数。
+client鼠标操作是当有window获取到焦点时触发的操作，awesome将当前捕获到焦点的window作为参数传递给对应的函数。
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   clientbuttons = gears.table.join(
       awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
@@ -408,7 +408,7 @@ client鼠标操作是当有应用获取到焦点时触发的操作，awesome将�
       awful.button({ modkey }, 3, awful.mouse.client.resize))
 #+END_SRC
 
-client鼠标操作需要通过应用的buttons属性来设置，参见后面的Rules章节
+client鼠标操作需要通client的buttons属性来设置，参见后面的Rules章节
 *** 设置快捷键
 每个快捷键都保存为一个key对象。
 
@@ -586,7 +586,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
   root.keys(globalkeys)
 #+END_SRC
 **** 设置client快捷键
-client快捷键是当有焦点在应用程序(client)上时才能触发的。这时awesome调用快捷键上的函数时会将当前应用程序对象作为参数传递过去。
+client快捷键是当有焦点在window(client)上时才能触发的。这时awesome调用快捷键上的函数时会将当前client作为参数传递过去。
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",
@@ -633,17 +633,17 @@ client快捷键是当有焦点在应用程序(client)上时才能触发的。这
   )
 #+END_SRC
 
-client快捷键需要通过对应用的keys属性来进行设置(参见Rules章节)
+client快捷键需要通过对client的keys属性来进行设置(参见Rules章节)
 *** Rules
-=awful.rules.rules= 是全局的规则表，这里定义的规则适用于所有新开的应用。
+=awful.rules.rules= 是全局的规则表，这里定义的规则适用于所有新开的window。
 
 一个规则由 =rule= / =rule_any= ， =except= / =except_any= , =properties= / =callback= 组成，其中:
 
 + =rule= 定义了条件,其中的条件都必须满足才能满足该rule
 + =rule_any= 定义了条件,其中的条件只需要满足一个就能满足该rule
 + =except= / =except_any= 定义了符合rule但需要排除掉的那些特殊情况
-+ =properties= 定义了应用的属性,若属性值为函数，则该函数的返回值会作为属性的值。
-+ =callback= 定义了触发的回调函数,该回调函数会接受打开的应用作为参数
++ =properties= 定义了client的属性,若属性值为函数，则该函数的返回值会作为属性的值。
++ =callback= 定义了触发的回调函数,该回调函数会接受打开的client作为参数
 
 属性是可以任意的，但下面的属性有特殊的意义
 
@@ -721,7 +721,7 @@ client快捷键需要通过对应用的keys属性来进行设置(参见Rules章�
   }
 #+END_SRC
 *** Signal
-注册事件发生时的触发函数,该函数接受一个应用(client对象)作为参数
+注册事件发生时的触发函数,该函数接受一个窗口(client对象)作为参数
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- {{{ Signals
   -- Signal function to execute when a new client appears.
