@@ -721,6 +721,7 @@ client快捷键需要通过对应用的keys属性来进行设置(参见Rules章�
   }
 #+END_SRC
 *** Signal
+注册事件发生时的触发函数,该函数接受一个应用(client对象)作为参数
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   -- {{{ Signals
   -- Signal function to execute when a new client appears.
