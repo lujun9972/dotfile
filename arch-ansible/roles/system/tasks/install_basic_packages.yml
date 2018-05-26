@@ -12,6 +12,7 @@
     - emacs
     - shadowsocks
     - alsa-utils
+    - pulseaudio-alsa
     - smplayer
     - mpg123
     - cmake
