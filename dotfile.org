@@ -217,7 +217,7 @@ awful.widget.launcher:new (args)函数创建一个button widget，点击之后�
                                        menu = mymainmenu })
 
   emacslauncher = awful.widget.launcher({ image = "/usr/share/icons/hicolor/128x128/apps/emacs.png",
-  command = "~/bin/ec"})
+  command = "/usr/bin/emacsclient -a '' -n -c"})
 
 #+END_SRC
 
@@ -345,7 +345,7 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
       set_wallpaper(s)
 
       -- Each screen has its own tag table.
-      awful.tag({ "1.HOME", "2.STUDIO", "3.GAMES", "4.EDIT", "5.VM", "6.IRC", "7", "8", "9" }, s, awful.layout.layouts[1])
+      awful.tag({ "1.HOME", "2.STUDIO", "3.GAMES", "4.EDIT", "5.VM", "6.IRC"}, s, awful.layout.layouts[1])
 
       -- Create a promptbox for each screen
       s.mypromptbox = awful.widget.prompt()
@@ -372,6 +372,7 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
           { -- Left widgets
               layout = wibox.layout.fixed.horizontal,
               mylauncher,
+              emacslauncher,
               s.mytaglist,
               s.mypromptbox,
           },
