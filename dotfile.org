@@ -327,10 +327,10 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 + tiled (surf, s, offset)
 + fit (surf, s, background)
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
-  local function set_wallpaper(s)
+  local function set_wallpaper(s,wallpaper)
       -- Wallpaper
       if beautiful.wallpaper then
-          local wallpaper = beautiful.wallpaper
+          wallpaper = wallpaper or beautiful.wallpaper
           -- If wallpaper is a function, call it with the screen
           if type(wallpaper) == "function" then
               wallpaper = wallpaper(s)
