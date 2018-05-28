@@ -23,4 +23,5 @@
     - unrar
     - ntfs-3g
     - bash-completion
+    - dmenu
     - intel-ucode
