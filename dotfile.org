@@ -37,16 +37,6 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
 
 *** 自定义一些函数
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
-  function file_exist_p (file)
-    local f = io.open(file)
-    if f ~= nil then
-      io.close(f)
-      return true
-    else
-      return false
-    end
-  end
-
   local function client_menu_toggle_fn()
     local instance = nil
 
@@ -223,7 +213,7 @@ awful.widget.launcher:new (args)函数创建一个button widget，点击之后�
 
   -- 随机从reddit中选择一副壁纸
   wallpaperlauncher = awful.widget.launcher({ image = "/usr/share/icons/Adwaita/256x256/apps/preferences-desktop-screensaver.png",
-                                              command = "/home/lujun9972/bin/reddit_wallpaper.sh"})
+                                              command = os.getenv("HOME") .. "/bin/reddit_wallpaper.sh"})
 
 #+END_SRC
 
@@ -848,6 +838,16 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
       awful.util.spawn_with_shell(autorunApps[app])
     end
   end
+#+END_SRC
+*** 设置定时器，定时更新壁纸
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  gears.timer{timeout=3600,       -- 每1小时
+              callback=function ()
+                awful.spawn(os.getenv("HOME") .. "/bin/reddit_wallpaper.sh")
+              end,
+              autostart=true,
+              single_shot=false
+  }
 #+END_SRC
 ** Stumpwm 
 :PROPERTIES:
