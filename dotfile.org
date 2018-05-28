@@ -543,7 +543,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       end,
       {description = "restore minimized", group = "client"}),
 
-    -- Prompt
+    -- Prompt,如果有安装dmenu,则使用dmenu，否则使用原生的prompt widget
     awful.key({ modkey },            "r",
       function ()
         awful.spawn.easy_async_with_shell("dmenu_path|dmenu",function (stdout,stderr,exitreason,exitcode)
