@@ -1121,6 +1121,15 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   (run-shell-command "volti")
 
 #+END_SRC
+*** 每次启动awesome，都用cowfortune来那么一句
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
+  awful.spawn.easy_async("cowfortune",function (stdout,stderr,exitreason,exitcode)
+                           naughty.notify{text=stdout,
+                                          width=auto,
+                                          timeout=10,
+                                          border_width=0}
+  end)
+#+END_SRC
 * bash登陆相关配置
 ** bash_profile
 #+BEGIN_SRC sh :tangle "~/.bash_profile"
