@@ -404,9 +404,9 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
               layout = wibox.layout.fixed.horizontal,
               mykeyboardlayout,
               wibox.widget.systray(),
-              mytextclock,
-              wibox.widget.textbox('  |  '),
               myemmswatcher,
+              wibox.widget.textbox('  |  '),
+              mytextclock,
               s.mylayoutbox,
           },
       }
