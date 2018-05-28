@@ -544,7 +544,16 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () awful.spawn.with_shell("dmenu_path|dmenu_run") end,
+    awful.key({ modkey },            "r",
+      function ()
+        awful.spawn.easy_async_with_shell("dmenu_path|dmenu",function (stdout,stderr,exitreason,exitcode)
+                                            if exitcode ~= 0 then
+                                              awful.screen.focused().mypromptbox:run()
+                                            else
+                                              awful.spawn(terminal .. " -e " ..stdout)
+                                            end
+        end)
+      end,
       {description = "run prompt", group = "launcher"}),
 
     -- awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
