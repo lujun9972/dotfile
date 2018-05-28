@@ -7,6 +7,10 @@
 
 * 窗口管理器配置
 ** AwesomeWM
+*** 设定Lua程序使用的locale
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
+  os.setlocale("zh_CN.UTF-8")
+#+END_SRC
 *** 加载Awesome API library
 Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
 
@@ -239,6 +243,7 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   -- Create a textclock widget
   mytextclock = wibox.widget.textclock()
+  my_holiday_textbox = wibox.widget.textbox()
 #+END_SRC
 **** 显示当前emms播放的音乐
 ~awful.widget.watch:new (command[, timeout=5][, callback], base_widget)~ 返回一个watch widget以及对应的gears.timer，其中
@@ -851,7 +856,8 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
     end
   end
 #+END_SRC
-*** 设置定时器，定时更新壁纸
+*** 定时任务
+**** 设置定时器，定时更新壁纸
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   gears.timer{timeout=3600,       -- 每1小时
               callback=function ()
@@ -861,6 +867,42 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
               single_shot=false
   }
 #+END_SRC
+**** 定时更新holiday信息 
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  gears.timer{timeout=60,       -- 每分钟
+              callback=function ()
+                local holidays={{1,1,"元旦"},
+                  {2,10,"我的生日"},
+                  {2,14,"情人节"},
+                  {3,14,"白色情人节"},
+                  {4,1,"愚人节"},
+                  {5,1,"劳动节"},
+                  {5,0,2,"母亲节"},
+                  {6,1,"儿童节"},
+                  {6,0,3,"父亲节"},
+                  {7,1,"建党节"},
+                  {8,1,"建军节"},
+                  {9,10,"教师节"},
+                  {9,23,"她的生日"},
+                  {10,1,"国庆节"},
+                  {12,25,"圣诞节"}}
+                my_holiday_textbox.text=""
+              end,
+              autostart=true,
+              single_shot=false
+  }
+#+END_SRC
+
+*** 每次启动awesome，都用cowfortune来那么一句
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  awful.spawn.easy_async("cowfortune",function (stdout,stderr,exitreason,exitcode)
+                           naughty.notify{text=stdout,
+                                          width=auto,
+                                          timeout=10,
+                                          border_width=0}
+  end)
+#+END_SRC
+
 ** Stumpwm 
 :PROPERTIES:
 :tangle:   ~/.stumpwmrc
@@ -1120,15 +1162,6 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   (run-shell-command "nm-applet")
   (run-shell-command "volti")
 
-#+END_SRC
-*** 每次启动awesome，都用cowfortune来那么一句
-#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
-  awful.spawn.easy_async("cowfortune",function (stdout,stderr,exitreason,exitcode)
-                           naughty.notify{text=stdout,
-                                          width=auto,
-                                          timeout=10,
-                                          border_width=0}
-  end)
 #+END_SRC
 * bash登陆相关配置
 ** bash_profile
