@@ -260,10 +260,10 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 + base_widget为父类widget，默认为wibox.widget.textbox()
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   -- 使用watch widget查看emms播放的内容
-  myemmswatcher,myemmstimer = awful.widget.watch("emacsclient -e '(when emms-player-playing-p \
-                    (format emms-show-format \
-                            (emms-track-description \
-                             (emms-playlist-current-selected-track))))'",2)
+  myemmswatcher,myemmstimer = awful.widget.watch([[emacsclient -e '(when emms-player-playing-p
+                    (format emms-show-format 
+                            (emms-track-description 
+                             (emms-playlist-current-selected-track))))']],2)
   #+END_SRC
 
 **** 定义点击tag的行为
@@ -544,8 +544,11 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    awful.key({ modkey },            "r",     function () awful.spawn.with_shell("dmenu_path|dmenu_run") end,
       {description = "run prompt", group = "launcher"}),
+
+    -- awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    --   {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
       function ()
