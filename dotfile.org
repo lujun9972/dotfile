@@ -239,6 +239,7 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 #+END_SRC
 *** Wibar
 
+**** 显示当前时间widget
 ~wibox.widget.textclock ([format[, timeout[, timezone]]])~ 创建一个textclock widget，用于显示时间。其中
 
 + format :: 指明时间的格式，默认为"%a %b %d"
@@ -249,6 +250,31 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
   -- Create a textclock widget
   mytextclock = wibox.widget.textclock()
 #+END_SRC
+**** 显示当前emms播放的音乐
+~awful.widget.watch:new (command[, timeout=5][, callback], base_widget)~ 返回一个watch widget以及对应的gears.timer，其中
+
++ command为定时执行的命令
++ timeout为定时执行命令的时间间隔秒数,默认为5秒执行一次command
++ callback为回调函数，默认为
+  #+BEGIN_SRC lua
+    function(widget, stdout, stderr, exitreason, exitcode)
+      widget:set_text(stdout)
+    end
+
+    -- widget: watch widget本身
+    -- stdout: command的标准输出字符串
+    -- stderr: command的标准错误输出字符串
+    -- exitreason: command退出的原因，可以是"exit"表示正常退出 或 "signal"表示收到信号导致退出.
+    -- exitcode: 退出码. 若是正常退出("exit")则为command的exit code. 若是收到信号退出("signal")则是导致进程退出的信号量
+  #+END_SRC
++ base_widget为父类widget，默认为wibox.widget.textbox()
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
+  -- 使用watch widget查看emms播放的内容
+  myemmswatcher,myemmstimer = awful.widget.watch("emacsclient -e '(when emms-player-playing-p \
+                    (format emms-show-format \
+                            (emms-track-description \
+                             (emms-playlist-current-selected-track))))'",2)
+  #+END_SRC
 
 **** 定义点击tag的行为
 =gears.table.join(tables)= 会遍历参数中的所有table中的key，插入成一个新的table
@@ -389,6 +415,8 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
               mykeyboardlayout,
               wibox.widget.systray(),
               mytextclock,
+              wibox.widget.textbox('  |  '),
+              myemmswatcher,
               s.mylayoutbox,
           },
       }
@@ -823,7 +851,7 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
 #+END_SRC
 ** Stumpwm 
 :PROPERTIES:
-:tangle:  ~/.stumpwmrc
+:tangle:   ~/.stumpwmrc
 :END:
 #+BEGIN_SRC lisp 
   ;; vim:filetype=lisp
@@ -1233,13 +1261,13 @@ Other fonts can be used through Xft using the following format:
 #+END_SRC
 **** 设置背景色，前景色
 colorn: colour
-           Use the specified colour for the colour value n, where 0-7
-           corresponds to low-intensity (normal) colours and 8-15 corresponds
-           to high-intensity (bold = bright foreground, blink = bright
-           background) colours. The canonical names are as follows: 0=black,
-           1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan, 7=white, but
-           the actual colour names used are listed in the COLOURS AND GRAPHICS
-           section.
+Use the specified colour for the colour value n, where 0-7
+corresponds to low-intensity (normal) colours and 8-15 corresponds
+to high-intensity (bold = bright foreground, blink = bright
+background) colours. The canonical names are as follows: 0=black,
+1=red, 2=green, 3=yellow, 4=blue, 5=magenta, 6=cyan, 7=white, but
+the actual colour names used are listed in the COLOURS AND GRAPHICS
+section.
 #+BEGIN_SRC conf-xdefaults :tangle "~/.Xdefaults"
   URxvt.foreground:white
   URxvt.background:black
