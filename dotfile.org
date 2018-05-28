@@ -243,9 +243,8 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   -- Create a textclock widget
   mytextclock = wibox.widget.textclock()
-  my_holiday_textbox = wibox.widget.textbox()
 #+END_SRC
-**** 显示当前emms播放的音乐
+**** 显示holiday信息
 ~awful.widget.watch:new (command[, timeout=5][, callback], base_widget)~ 返回一个watch widget以及对应的gears.timer，其中
 
 + command为定时执行的命令
@@ -263,9 +262,19 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
     -- exitcode: 退出码. 若是正常退出("exit")则为command的exit code. 若是收到信号退出("signal")则是导致进程退出的信号量
   #+END_SRC
 + base_widget为父类widget，默认为wibox.widget.textbox()
+  
+
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
+  -- 使用watch widget查看holiday信息
+  my_holiday_watcher,my_holiday_timer = awful.widget.watch([[emacsclient -e '
+    (let* ((date (calendar-current-date))
+           (holiday-list (calendar-check-holidays date)))
+      (string-join holiday-list ";  "))']],60)
+  #+END_SRC
+**** 显示当前emms播放的音乐
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   -- 使用watch widget查看emms播放的内容
-  myemmswatcher,myemmstimer = awful.widget.watch([[emacsclient -e '(when emms-player-playing-p
+  my_emms_watcher,my_emms_timer = awful.widget.watch([[emacsclient -e '(when emms-player-playing-p
                     (format emms-show-format 
                             (emms-track-description 
                              (emms-playlist-current-selected-track))))']],2)
@@ -409,9 +418,10 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
               layout = wibox.layout.fixed.horizontal,
               mykeyboardlayout,
               wibox.widget.systray(),
-              myemmswatcher,
+              my_emms_watcher,
               wibox.widget.textbox('  |  '),
               mytextclock,
+              my_holiday_watcher,
               s.mylayoutbox,
           },
       }
@@ -867,32 +877,6 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
               single_shot=false
   }
 #+END_SRC
-**** 定时更新holiday信息 
-#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
-  gears.timer{timeout=60,       -- 每分钟
-              callback=function ()
-                local holidays={{1,1,"元旦"},
-                  {2,10,"我的生日"},
-                  {2,14,"情人节"},
-                  {3,14,"白色情人节"},
-                  {4,1,"愚人节"},
-                  {5,1,"劳动节"},
-                  {5,0,2,"母亲节"},
-                  {6,1,"儿童节"},
-                  {6,0,3,"父亲节"},
-                  {7,1,"建党节"},
-                  {8,1,"建军节"},
-                  {9,10,"教师节"},
-                  {9,23,"她的生日"},
-                  {10,1,"国庆节"},
-                  {12,25,"圣诞节"}}
-                my_holiday_textbox.text=""
-              end,
-              autostart=true,
-              single_shot=false
-  }
-#+END_SRC
-
 *** 每次启动awesome，都用cowfortune来那么一句
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   awful.spawn.easy_async("cowfortune",function (stdout,stderr,exitreason,exitcode)
