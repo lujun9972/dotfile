@@ -585,7 +585,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       end,
       {description = "lua execute prompt", group = "awesome"}),
 
-
+    -- modkey+m 用emacs查看man entry
     awful.key({ modkey }, "m",
       function ()
         awful.prompt.run {
