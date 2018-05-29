@@ -584,6 +584,28 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
         }
       end,
       {description = "lua execute prompt", group = "awesome"}),
+
+
+    awful.key({ modkey }, "m",
+      function ()
+        awful.prompt.run {
+          prompt       = "Manual Entry: ",
+          textbox      = awful.screen.focused().mypromptbox.widget,
+          exe_callback = function (entry)
+            if not entry or #entry == 0 then return end
+            local command=string.format([[emacsclient -n -c -e '(progn (man "%s")
+            (delete-window)
+              (local-set-key (kbd "C-x C-c")
+                      (lambda ()
+                          (interactive)
+                          (kill-this-buffer)
+                          (save-buffers-kill-terminal t))))']],entry)
+            awful.spawn.with_shell(command)
+          end,
+          history_path = awful.util.get_cache_dir() .. "/history_man"
+        }
+      end,
+      {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
       {description = "show the menubar", group = "launcher"})
