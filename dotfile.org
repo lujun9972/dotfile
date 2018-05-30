@@ -879,7 +879,8 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   autorun = true
   autorunApps = 
     { 
-      "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
+      -- 使用emacs daemon unit代替
+      -- "ps -fu $(whoami)|grep \"emacs --daemon\"|grep -v grep || emacs --daemon"
     }
 
   if autorun then
