@@ -97,6 +97,8 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   customization.func.client_opaque_on = function (c)
     awful.util.spawn_with_shell(customization.default.compmgr.. " " .. customization.default.compmgr_args)
   end
+
+  customization.func.client_opaque_on()
 #+END_SRC
 *** 错误处理
 错误可能会有以下几类：
