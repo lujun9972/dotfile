@@ -942,7 +942,7 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
 *** 定时任务
 **** 设置定时器，定时更新壁纸
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
-  gears.timer{timeout=3600,       -- 每1小时
+  customization.timer.change_wallpaper = gears.timer{timeout=3600,       -- 每1小时
               callback=function ()
                 awful.spawn(os.getenv("HOME") .. "/bin/reddit_wallpaper.sh")
               end,
