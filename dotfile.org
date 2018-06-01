@@ -337,15 +337,15 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
   customization.widgets.holiday_watcher,customization.timer.holiday_timer = awful.widget.watch([[emacsclient -e '
     (let* ((date (calendar-current-date))
            (holiday-list (calendar-check-holidays date)))
-      (string-join holiday-list ";  "))']],60)
+       (intern (string-join holiday-list ";  ")))']],60)
   #+END_SRC
 **** 显示当前emms播放的音乐
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   -- 使用watch widget查看emms播放的内容
   customization.widgets.emms_watcher,customization.widgets.emms_timer = awful.widget.watch([[emacsclient -e '(when emms-player-playing-p
-                    (format emms-show-format 
-                            (emms-track-description 
-                             (emms-playlist-current-selected-track))))']],2)
+                    (intern(format emms-show-format 
+                              (emms-track-description 
+                                (emms-playlist-current-selected-track)))))']],2)
   #+END_SRC
 
 **** 定义点击tag的行为
