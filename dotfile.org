@@ -631,7 +631,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
     awful.key({ modkey },            "r",
       function ()
         awful.spawn.easy_async_with_shell("dmenu_path|dmenu",function (stdout,stderr,exitreason,exitcode)
-                                            if exitcode ~= 0 then
+                                            if exitcode == 127 then -- 127表示命令没找到
                                               awful.screen.focused().mypromptbox:run()
                                             else
                                               awful.spawn(terminal .. " -e " ..stdout)
