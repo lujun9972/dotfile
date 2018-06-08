@@ -8,6 +8,7 @@
 * 窗口管理器配置
 ** AwesomeWM
 *** 设定Lua程序使用的locale
+设定locale可以影响时间的显示格式
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
   os.setlocale("zh_CN.UTF-8")
 #+END_SRC
