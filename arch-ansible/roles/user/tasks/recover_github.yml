@@ -5,4 +5,5 @@
   block:
     - git: accept_hostkey=yes dest=~/我的笔记 repo=git@github.com:lujun9972/-.git
     - git: accept_hostkey=yes dest=~/我的GTD repo=git@github.com:lujun9972/DTG.git
+    - git: accept_hostkey=yes dest=~/CodeLibrary repo=git@github.com:lujun9972/CodeLibrary.git
   tags: github_repo
