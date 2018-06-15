@@ -131,6 +131,10 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   function customization.func.raise_volume()
      awful.util.spawn("amixer -q -D pulse sset Master 5%+")
   end
+
+  function customization.func.mute_volume()
+     awful.util.spawn("amixer -q -D pulse sset Master 1+ toggle")
+  end
 #+END_SRC
 **** 锁屏
 使用 =Mod4+l= 进行锁屏，默认通过命令 =xscreensaver-command -lock= 来实现，不过也可以改成用 =xlock=
@@ -589,6 +593,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
   globalkeys = gears.table.join(
     awful.key({},"XF86AudioLowerVolume",customization.func.lower_volume),
     awful.key({},"XF86AudioRaiseVolume",customization.func.raise_volume),
+    awful.key({},"XF86AudioMute",customization.func.mute_volume),
     -- Mod4 + l :: 锁屏
     awful.key({modkey,            },"l",       customization.func.lock_screen
     ),
