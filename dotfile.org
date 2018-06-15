@@ -79,7 +79,10 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
 #+END_SRC
 
 **** 调整透明度
-=Mod4+]= 减少透明度， =Mod4+[= 增加透明度，但修改透明度之前要运行 =xcompmgr=
+=Mod4+]= 减少透明度， =Mod4+[= 增加透明度，但修改透明度之前要运行 =composite manager=, 可选的composite manager有
++ compton
++ xcompmgr
++ unagi
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   customization.default.property = {
     layout = awful.layout.suit.floating,
@@ -118,6 +121,17 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   end
 #+END_SRC
 
+**** 调整音量
+使用amixer命令可以调整音量
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  function customization.func.lower_volume()
+     awful.util.spawn("amixer -q -D pulse sset Master 5%-")
+  end
+
+  function customization.func.raise_volume()
+     awful.util.spawn("amixer -q -D pulse sset Master 5%+")
+  end
+#+END_SRC
 **** 锁屏
 使用 =Mod4+l= 进行锁屏，默认通过命令 =xscreensaver-command -lock= 来实现，不过也可以改成用 =xlock=
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
@@ -573,12 +587,8 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
 
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   globalkeys = gears.table.join(
-    awful.key({},"XF86AudioLowerVolume",function ()
-        awful.util.spawn("amixer -q sset Master 2dB-")
-    end),
-    awful.key({},"XF86AudioRaiseVolume",function ()
-        awful.util.spawn("amixer -q sset Master 2dB+")
-    end),
+    awful.key({},"XF86AudioLowerVolume",customization.func.lower_volume),
+    awful.key({},"XF86AudioRaiseVolume",customization.func.raise_volume),
     -- Mod4 + l :: 锁屏
     awful.key({modkey,            },"l",       customization.func.lock_screen
     ),
