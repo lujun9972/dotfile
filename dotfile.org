@@ -131,16 +131,17 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   function customization.func.take_client_screen(c,path)
     if not c then
       local terms = {}
-      for i,ci in ipairs(client.get()) do
-        terms[i] = {ci.name,
-                    function() customization.func.take_client_screen(ci, path) end,
-                    ci.icon
+      for i,c in ipairs(client.get()) do
+        terms[i] = {c.name,
+                    function() customization.func.take_client_screen(c, path) end,
+                    c.icon
         }
       end
       awful.menu(terms):show()
     else
       path = path or string.format("%s_%d.png", c.class or c.name, os.time())
       gears.surface(c.content):write_to_png(path)
+      naughty.notify{text=string.format("截屏保存在:%s",path),icon=c.icon}
     end
   end
 #+END_SRC
