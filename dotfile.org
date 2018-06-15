@@ -126,12 +126,22 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   end
 #+END_SRC
 
-保存窗口截屏
+保存窗口截屏,使用Win+Print截取当前窗口屏幕，使用Win+Shift+Print选择要截取的窗口
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   function customization.func.take_client_screen(c,path)
-    c = c or awful.menu.clients({ theme = { width = 250 } })
-    path = path or string.format("%s_%d.png", c.class or c.name, os.time())
-    gears.surface(c.content):write_to_png(path)
+    if not c then
+      local terms = {}
+      for i,ci in ipairs(client.get()) do
+        terms[i] = {ci.name,
+                    function() customization.func.take_client_screen(ci, path) end,
+                    ci.icon
+        }
+      end
+      awful.menu(terms):show()
+    else
+      path = path or string.format("%s_%d.png", c.class or c.name, os.time())
+      gears.surface(c.content):write_to_png(path)
+    end
   end
 #+END_SRC
 *** 错误处理
@@ -564,6 +574,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
     awful.key({},"XF86AudioRaiseVolume",function ()
         awful.util.spawn("amixer -q sset Master 2dB+")
     end),
+    -- Win + l :: 锁屏
     awful.key({modkey,            },"l",       customization.func.lock_screen
     ),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -701,7 +712,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       {description = "show the menubar", group = "launcher"}),
 
     -- 保存client屏幕
-    awful.key({ modkey, "Shift"}, "p", customization.func.take_client_screen,
+    awful.key({ modkey,  "Shift"}, "Print", customization.func.take_client_screen,
       {description = "保存client屏幕", group = "client"})
   )
 
@@ -812,7 +823,7 @@ client快捷键是当有焦点在window(client)上时才能触发的。这时awe
     awful.key({ modkey, }, "]", customization.func.client_opaque_more,
       {description = "增加透明度", group = "client"}),
 
-    awful.key({ modkey, "Ctrl"}, "p", customization.func.take_client_screen,
+    awful.key({ modkey,}, "Print", customization.func.take_client_screen,
       {description = "保存当前client屏幕", group = "client"})
   )
 #+END_SRC
