@@ -70,6 +70,7 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   customization.timer = {}
   customization.widgets = {}
 #+END_SRC
+
 判定命令是否存在
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   function customization.func.command_exist_p(cmd)
@@ -113,6 +114,15 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
     customization.func.client_opaque_off() -- 关闭以前的opague
     customization.func.client_opaque_on()
 
+  end
+#+END_SRC
+
+锁屏
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  customization.default.xlock = 'xscreensaver-command'
+  customization.default.xlock_args = '-lock'
+  function customization.func.lock_screen()
+    awful.util.spawn_with_shell(customization.default.xlock .. " " .. customization.default.xlock_args)
   end
 #+END_SRC
 
@@ -554,6 +564,8 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
     awful.key({},"XF86AudioRaiseVolume",function ()
         awful.util.spawn("amixer -q sset Master 2dB+")
     end),
+    awful.key({modkey,            },"l",       customization.func.lock_screen
+    ),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
       {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
