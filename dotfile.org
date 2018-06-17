@@ -152,7 +152,7 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   function customization.func.take_client_screen(c,path)
     if not c then
-      local terms = {}
+      local terms = { theme = { width = 250 } }
       for i,c in ipairs(client.get()) do
         terms[i] = {c.name,
                     function() customization.func.take_client_screen(c, path) end,
@@ -178,7 +178,7 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
       (bookmark-maybe-load-default-file)
       (mapcar 'file-truename (mapcar 'bookmark-get-filename bookmark-alist)))"]],
       function (stdout,stderr,exitreason,exitcode)
-        local emacs_bookmark_menu = {}
+        local emacs_bookmark_menu = { theme = { width = 250 } }
         for path in string.gmatch(stdout, '"([^"]+)"') do
           local composes = gears.string.split(path,'/')
           local name = composes[#composes]
