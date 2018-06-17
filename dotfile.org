@@ -167,6 +167,37 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
     end
   end
 #+END_SRC
+**** 读取Emacs中的bookmark，形成菜单
++ 若bookmark为文件则用xdg-open打开
++ 若bookmark为目录，则打开terminal，进入该目录
+  
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
+  function customization.func.open_emacs_bookmark()
+    local ret = awful.spawn.easy_async([[emacsclient --eval "(progn
+      (require 'bookmark)
+      (bookmark-maybe-load-default-file)
+      (mapcar 'file-truename (mapcar 'bookmark-get-filename bookmark-alist)))"]],
+      function (stdout,stderr,exitreason,exitcode)
+        local emacs_bookmark_menu = {}
+        for path in string.gmatch(stdout, '"([^"]+)"') do
+          local composes = gears.string.split(path,'/')
+          local name = composes[#composes]
+          if name == "" or name == " " then
+            name = composes[#composes - 1]
+          end
+          if gears.filesystem.is_dir(path) then
+            table.insert(emacs_bookmark_menu, {name, "urxvt -cd " .. path}) -- 由于每个terminal设置默认目录的方法都不一样，因此这里写死terminal
+          else
+            table.insert(emacs_bookmark_menu, {name, "xdg-open " .. path})
+          end
+        end
+        awful.menu(emacs_bookmark_menu):show()
+      end)
+    if type(re) == "string" then
+      naughty.notify{text=tostring(ret)}
+    end
+  end
+#+END_SRC
 *** 错误处理
 错误可能会有以下几类：
 
@@ -731,6 +762,9 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
     awful.key({ modkey }, "p", function() menubar.show() end,
       {description = "show the menubar", group = "launcher"}),
 
+    -- emacs bookmark
+    awful.key({ modkey }, "b", customization.func.open_emacs_bookmark,
+      {description = "显示Emacs Bookmark", group = "emacs"}),
     -- 保存client屏幕
     awful.key({ modkey,  "Shift"}, "Print", customization.func.take_client_screen,
       {description = "保存client屏幕", group = "client"})
