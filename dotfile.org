@@ -325,7 +325,9 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   xdg_menu = require("archmenu")
   mainmenu_items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
     { "Applications", xdgmenu },
-    { "Eshell", "eshell.sh"},
+    { "Eshell", [[emacsclient -c --eval "(progn
+                                            (eshell 'new)
+                                            (delete-other-windows))"]]},
     { "dired", "dired.sh" },
     { "Firefox", "firefox" },
     { "open terminal", terminal }
