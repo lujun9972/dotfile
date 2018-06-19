@@ -59,7 +59,7 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   end
 #+END_SRC
 
-自定义客户化的作用域
+**** 自定义客户化的作用域
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   customization = {}
   customization.config = {}
@@ -70,14 +70,19 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
   customization.timer = {}
   customization.widgets = {}
 #+END_SRC
-判定命令是否存在
+
+**** 判定命令是否存在
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   function customization.func.command_exist_p(cmd)
      return os.execute("command -v " .. cmd)
   end
 #+END_SRC
 
-调整透明度
+**** 调整透明度
+=Mod4+]= 减少透明度， =Mod4+[= 增加透明度，但修改透明度之前要运行 =composite manager=, 可选的composite manager有
++ compton
++ xcompmgr
++ unagi
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   customization.default.property = {
     layout = awful.layout.suit.floating,
@@ -113,6 +118,84 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
     customization.func.client_opaque_off() -- 关闭以前的opague
     customization.func.client_opaque_on()
 
+  end
+#+END_SRC
+
+**** 调整音量
+使用amixer命令可以调整音量
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  function customization.func.lower_volume()
+     awful.util.spawn("amixer -q -D pulse sset Master 5%-")
+  end
+
+  function customization.func.raise_volume()
+     awful.util.spawn("amixer -q -D pulse sset Master 5%+")
+  end
+
+  function customization.func.mute_volume()
+     awful.util.spawn("amixer -q -D pulse sset Master 1+ toggle")
+  end
+#+END_SRC
+**** 锁屏
+使用 =Mod4+l= 进行锁屏，默认通过命令 =xscreensaver-command -lock= 来实现，不过也可以改成用 =xlock=
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  customization.default.xlock = 'xscreensaver-command'
+  customization.default.xlock_args = '-lock'
+  function customization.func.lock_screen()
+    awful.util.spawn_with_shell(customization.default.xlock .. " " .. customization.default.xlock_args)
+  end
+#+END_SRC
+
+**** 保存窗口截屏
++ 使用Mod4+Print截取当前窗口屏幕
++ 使用Mod4+Shift+Print选择要截取的窗口
+#+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
+  function customization.func.take_client_screen(c,path)
+    if not c then
+      local terms = { theme = { width = 250 } }
+      for i,c in ipairs(client.get()) do
+        terms[i] = {c.name,
+                    function() customization.func.take_client_screen(c, path) end,
+                    c.icon
+        }
+      end
+      awful.menu(terms):show()
+    else
+      path = path or string.format("%s_%d.png", c.class or c.name, os.time())
+      gears.surface(c.content):write_to_png(path)
+      naughty.notify{text=string.format("截屏保存在:%s",path),icon=c.icon}
+    end
+  end
+#+END_SRC
+**** 读取Emacs中的bookmark，形成菜单
++ 若bookmark为文件则用xdg-open打开
++ 若bookmark为目录，则打开terminal，进入该目录
+  
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
+  function customization.func.open_emacs_bookmark()
+    local ret = awful.spawn.easy_async([[emacsclient --eval "(progn
+      (require 'bookmark)
+      (bookmark-maybe-load-default-file)
+      (mapcar 'file-truename (mapcar 'bookmark-get-filename bookmark-alist)))"]],
+      function (stdout,stderr,exitreason,exitcode)
+        local emacs_bookmark_menu = { theme = { width = 250 } }
+        for path in string.gmatch(stdout, '"([^"]+)"') do
+          local composes = gears.string.split(path,'/')
+          local name = composes[#composes]
+          if name == "" or name == " " then
+            name = composes[#composes - 1]
+          end
+          if gears.filesystem.is_dir(path) then
+            table.insert(emacs_bookmark_menu, {name, "urxvt -cd " .. path}) -- 由于每个terminal设置默认目录的方法都不一样，因此这里写死terminal
+          else
+            table.insert(emacs_bookmark_menu, {name, "xdg-open " .. path})
+          end
+        end
+        awful.menu(emacs_bookmark_menu):show()
+      end)
+    if type(re) == "string" then
+      naughty.notify{text=tostring(ret)}
+    end
   end
 #+END_SRC
 *** 错误处理
@@ -552,12 +635,12 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
 
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
   globalkeys = gears.table.join(
-    awful.key({},"XF86AudioLowerVolume",function ()
-        awful.util.spawn("amixer -q sset Master 2dB-")
-    end),
-    awful.key({},"XF86AudioRaiseVolume",function ()
-        awful.util.spawn("amixer -q sset Master 2dB+")
-    end),
+    awful.key({},"XF86AudioLowerVolume",customization.func.lower_volume),
+    awful.key({},"XF86AudioRaiseVolume",customization.func.raise_volume),
+    awful.key({},"XF86AudioMute",customization.func.mute_volume),
+    -- Mod4 + l :: 锁屏
+    awful.key({modkey,            },"l",       customization.func.lock_screen
+    ),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
       {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -690,7 +773,14 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
-      {description = "show the menubar", group = "launcher"})
+      {description = "show the menubar", group = "launcher"}),
+
+    -- emacs bookmark
+    awful.key({ modkey }, "b", customization.func.open_emacs_bookmark,
+      {description = "显示Emacs Bookmark", group = "emacs"}),
+    -- 保存client屏幕
+    awful.key({ modkey,  "Shift"}, "Print", customization.func.take_client_screen,
+      {description = "保存client屏幕", group = "client"})
   )
 
   -- Bind all key numbers to tags.
@@ -798,7 +888,10 @@ client快捷键是当有焦点在window(client)上时才能触发的。这时awe
       {description = "减少透明度", group = "client"}),
 
     awful.key({ modkey, }, "]", customization.func.client_opaque_more,
-      {description = "增加透明度", group = "client"})
+      {description = "增加透明度", group = "client"}),
+
+    awful.key({ modkey,}, "Print", customization.func.take_client_screen,
+      {description = "保存当前client屏幕", group = "client"})
   )
 #+END_SRC
 

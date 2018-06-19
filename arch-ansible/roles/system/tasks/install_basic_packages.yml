@@ -6,6 +6,7 @@
     - fcitx-im
     - fcitx-configtool
     - fcitx-sunpinyin
+    - fcitx-googlepinyin
     - git
     - openssh
     - pandoc
