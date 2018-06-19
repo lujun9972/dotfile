@@ -6,7 +6,7 @@
 #+PROPERTY: header-args :comments link :tangle-mode (identity #o444) :mkdirp yes
 
 * 窗口管理器配置
-** AwesomeWM
+** Awesome WM
 *** 设定Lua程序使用的locale
 设定locale可以影响时间的显示格式
 #+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
@@ -445,56 +445,69 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
 **** 设置屏幕布局
 ~awful.screen.connect_for_each_screen (func)~ 为每个已存在的，且后面新创建的屏幕都调用 =func=, 其中 =func= 接受一个 =screen= 作为参数
 #+BEGIN_SRC lua :tangle "~/.config/awesome/rc.lua"
-  awful.screen.connect_for_each_screen(function(s)
-      -- Wallpaper
-      set_wallpaper(s)
+   awful.screen.connect_for_each_screen(function(s)
+       -- Wallpaper
+       set_wallpaper(s)
 
-      -- Each screen has its own tag table.
-      awful.tag({ "1.HOME", "2.STUDIO", "3.GAMES", "4.EDIT", "5.VM", "6.IRC"}, s, awful.layout.layouts[1])
+       -- Each screen has its own tag table.
+       awful.tag({ "1.HOME", "2.STUDIO", "3.GAMES", "4.EDIT", "5.VM", "6.IRC"}, s, awful.layout.layouts[1])
 
-      -- Create a promptbox for each screen
-      s.mypromptbox = awful.widget.prompt()
-      -- Create an imagebox widget which will contains an icon indicating which layout we're using.
-      -- We need one layoutbox per screen.
-      s.mylayoutbox = awful.widget.layoutbox(s)
-      s.mylayoutbox:buttons(gears.table.join(
-                             awful.button({ }, 1, function () awful.layout.inc( 1) end),
-                             awful.button({ }, 3, function () awful.layout.inc(-1) end),
-                             awful.button({ }, 4, function () awful.layout.inc( 1) end),
-                             awful.button({ }, 5, function () awful.layout.inc(-1) end)))
-      -- Create a taglist widget
-      s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
+       -- Create a promptbox for each screen
+       s.mypromptbox = awful.widget.prompt()
+       -- Create an imagebox widget which will contains an icon indicating which layout we're using.
+       -- We need one layoutbox per screen.
+       s.mylayoutbox = awful.widget.layoutbox(s)
+       s.mylayoutbox:buttons(gears.table.join(
+                              awful.button({ }, 1, function () awful.layout.inc( 1) end),
+                              awful.button({ }, 3, function () awful.layout.inc(-1) end),
+                              awful.button({ }, 4, function () awful.layout.inc( 1) end),
+                              awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+       -- Create a taglist widget
+       s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
 
-      -- Create a tasklist widget
-      s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+       -- Create a tasklist widget
+       s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
-      -- Create the wibox
-      s.mywibox = awful.wibar({ position = "top", screen = s })
+       -- Create the wibox
+       s.mywibox = awful.wibar({ position = "top", screen = s })
 
-      -- Add widgets to the wibox
-      s.mywibox:setup {
-          layout = wibox.layout.align.horizontal,
-          { -- Left widgets
-              layout = wibox.layout.fixed.horizontal,
-              mylauncher,
-              emacslauncher,
-              wallpaperlauncher,
-              s.mytaglist,
-              s.mypromptbox,
-          },
-          s.mytasklist, -- Middle widget
-          { -- Right widgets
-              layout = wibox.layout.fixed.horizontal,
-              mykeyboardlayout,
-              wibox.widget.systray(),
-              customization.widgets.emms_watcher,
-              wibox.widget.textbox('  |  '),
-              mytextclock,
-              customization.widgets.holiday_watcher,
-              s.mylayoutbox,
-          },
-      }
-  end)
+       -- Add widgets to the wibox
+       s.mywibox:setup {
+           layout = wibox.layout.align.horizontal,
+           { -- Left widgets
+               layout = wibox.layout.fixed.horizontal,
+               mylauncher,
+               emacslauncher,
+               wallpaperlauncher,
+               s.mytaglist,
+               s.mypromptbox,
+           },
+           s.mytasklist, -- Middle widget
+           { -- Right widgets
+               layout = wibox.layout.fixed.horizontal,
+               mykeyboardlayout,
+               wibox.widget.systray(),
+               customization.widgets.emms_watcher,
+               wibox.widget.textbox('  |  '),
+               mytextclock,
+               customization.widgets.holiday_watcher,
+               s.mylayoutbox,
+           },
+       }
+
+       -- Create the todo wibox
+       s.todo_wibox = awful.wibar({ position = "left", -- 在左边显示
+                                    screen = s,
+                                    stretch = true, -- 是否自动扩展以匹配屏幕,默认就是true
+                                    window = "dock", -- A client attached to the side of the screen.
+                                    visible = false, -- 
+       })
+       s.todo_wibox:setup{
+         layout = wibox.layout.fixed.vertical,
+         wibox.widget.textbox('todo1'),
+         wibox.widget.textbox('todo2')
+       }
+   end)
 #+END_SRC
 *** 设置鼠标操作
 **** 设置全局鼠标操作
