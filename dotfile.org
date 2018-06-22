@@ -1423,6 +1423,7 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   export QT_IM_MODULE=fcitx
   export XMODIFIERS="@im=fcitx"
   export LANG=zh_CN.UTF-8
+  export LC_ALL="zh_CN.UTF-8"
   fcitx
 
   # RUN emacs --daemon
