@@ -1626,3 +1626,44 @@ resize-font可以更改屏幕中字体大小,但是需要先安装 =urxvt-resize
   lat=23.12
   lon=113.25
 #+END_SRC
+* tmux配置
+** systemd后台自启动tmux
+开机自启tmux有诸多好处，当tmux服务在后台运行时,启动一个tmux会话能减少许多延时。
+
+此外，即使你没有登录，对tmux会话的任何定制都将保留，tmux会话也将会被持久化。这对于那些有重度tmux配置（启动慢）或者共享tmux会话的人来说特别有用。 
+
+#+BEGIN_SRC conf :tangle "~/.config/systemd/user/tmux.service"
+  [Unit]
+  Description=Start tmux in detached session
+
+  [Service]
+  Type=forking
+  User=%I
+  ExecStart=/usr/bin/tmux new-session -s %u -d
+  ExecStop=/usr/bin/tmux kill-session -t %u
+
+  [Install]
+  WantedBy=multi-user.target
+#+END_SRC
+
+** 配置tmux
+如果使用的是 256 色的终端，必须在 tmux 的配置文件 tmux.conf 中将终端设置为 tmux 或 tmux-256color
+#+BEGIN_SRC conf :tangle "~/.config/tmux.conf"
+  set -g default-terminal "tmux-256color"
+#+END_SRC
+
+设置最多回滚的行数 
+#+BEGIN_SRC conf :tangle "~/.config/tmux.conf"
+  set -g history-limit 10000
+#+END_SRC
+
+启动non-login shell
+#+BEGIN_SRC conf  :tangle "~/.config/tmux.conf"
+set -g default-command "${SHELL}"
+#+END_SRC
+
+标题栏自动更改
+#+BEGIN_SRC conf
+  set -g set-titles on
+  set -g set-titles-string "#T"
+#+END_SRC
