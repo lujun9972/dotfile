@@ -1362,6 +1362,9 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
 
   # ps -fu $(whoami)|grep "emacs --daemon"|grep -v grep || LC_ALL=zh_CN.UTF-8 emacs --daemon &
 
+  # show git branch in bash prompt
+  export PS1="\u@\h \[\033[32m\]\W\[\033[33m\]\$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/')\[\033[00m\] $ "
+
   if shopt -q login_shell;then
       # NO BEEP
       setterm -blength 0
