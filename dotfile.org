@@ -690,7 +690,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
       {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey,  "Shift" }, "f", function () awful.spawn("rox") end,
+    awful.key({ modkey,  "Shift" }, "f", function () awful.spawn("nemo") end,
       {description = "open a file manager", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
       {description = "reload awesome", group = "awesome"}),
@@ -1279,8 +1279,8 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   ;;   (my-run-or-raise "nautilus --no-desktop" '(:class "Nautilus")))
 
   (defcommand file-manager () ()
-    "Start rox"
-    (my-run-or-raise "rox" '(:class "FileManager")))
+    "Start nemo"
+    (my-run-or-raise "nemo" '(:class "FileManager")))
 
   (defcommand foxit () ()
     (launch-crossover-app "FoxitReader" "FoxitReader"))
