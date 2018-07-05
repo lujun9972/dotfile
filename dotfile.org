@@ -1504,7 +1504,7 @@ Other fonts can be used through Xft using the following format:
   ! URxvt.font: 9x15
   ! URxvt.font: -misc-fixed-bold-r-normal--15-140-75-75-c-90-iso8859-1
   ! URxvt.font: xft:monaco:bold:size=10
-  URxvt.font: xft:DejaVu Sans Mono:pixelsize=15:foundry=PfEd:weight=normal:slant=normal:width=normal:spacing=100:scalable=true
+  URxvt.font: xft:DejaVu Sans Mono:pixelsize=18:foundry=PfEd:weight=normal:slant=normal:width=normal:spacing=100:scalable=true
 
 #+END_SRC
 **** 设置背景色，前景色
