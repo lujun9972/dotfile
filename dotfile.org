@@ -1611,7 +1611,7 @@ resize-font可以更改屏幕中字体大小,但是需要先安装 =urxvt-resize
 #+END_SRC
 * redshift配置
 
-#+BEGIN_SRC conf :tangle "~/.config/redshift.conf"
+#+BEGIN_SRC conf-windows :tangle "~/.config/redshift.conf"
   [redshift]
   ; 设置色温
   temp-day=5500
