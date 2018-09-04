@@ -1416,6 +1416,10 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   export LESS_TERMCAP_so=$'\e[01;33m'
   export LESS_TERMCAP_ue=$'\e[0m'
   export LESS_TERMCAP_us=$'\e[1;4;31m'
+
+  if   urxvt -help 2>&1 |grep ^options |grep pixbuf;then
+      alias urxvt='urxvt -pixmap $(find ~/Pictures/wallpaper -type f|shuf|head -n 1)'
+  fi
 #+END_SRC
 * X相关配置
 ** xinitrc
