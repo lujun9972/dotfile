@@ -1655,7 +1655,7 @@ resize-font可以更改屏幕中字体大小,但是需要先安装 =urxvt-resize
 
 ** 配置tmux
 如果使用的是 256 色的终端，必须在 tmux 的配置文件 tmux.conf 中将终端设置为 tmux 或 tmux-256color
-#+BEGIN_SRC conf :tangle "~/.config/tmux.conf"
+#+BEGIN_SRC conf :tangle "~/.tmux.conf"
   set -g default-terminal "tmux-256color"
 #+END_SRC
 
