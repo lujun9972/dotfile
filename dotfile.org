@@ -1660,17 +1660,17 @@ resize-font可以更改屏幕中字体大小,但是需要先安装 =urxvt-resize
 #+END_SRC
 
 设置最多回滚的行数 
-#+BEGIN_SRC conf :tangle "~/.config/tmux.conf"
+#+BEGIN_SRC conf :tangle  "~/.tmux.conf"
   set -g history-limit 10000
 #+END_SRC
 
 启动non-login shell
-#+BEGIN_SRC conf  :tangle "~/.config/tmux.conf"
+#+BEGIN_SRC conf :tangle "~/.tmux.conf"
 set -g default-command "${SHELL}"
 #+END_SRC
 
 标题栏自动更改
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :tangle "~/.tmux.conf"
   set -g set-titles on
   set -g set-titles-string "#T"
 #+END_SRC
