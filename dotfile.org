@@ -1645,7 +1645,6 @@ resize-font可以更改屏幕中字体大小,但是需要先安装 =urxvt-resize
 
   [Service]
   Type=forking
-  User=%I
   ExecStart=/usr/bin/tmux new-session -s %u -d
   ExecStop=/usr/bin/tmux kill-session -t %u
 
