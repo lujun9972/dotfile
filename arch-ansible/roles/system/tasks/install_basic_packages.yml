@@ -24,7 +24,7 @@
     - unrar
     - ntfs-3g
     - bash-completion
-    # - dmenu
+    - dmenu
     - rofi
     - intel-ucode
     - mailutils
