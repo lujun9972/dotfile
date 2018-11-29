@@ -743,7 +743,7 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
     -- 使用rofi快速切换窗口，ssh链接，运行程序等，使用Ctrl-Tab切换mode
     awful.key({ modkey, "Shift" },            "r",
       function ()
-        awful.spawn("rofi -show")
+        awful.spawn("rofi -modi 'ssh,combi,keys' -show ssh")
       end,
       {description = "run prompt", group = "launcher"}),
 
