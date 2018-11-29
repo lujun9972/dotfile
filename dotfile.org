@@ -725,10 +725,10 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       end,
       {description = "restore minimized", group = "client"}),
 
-    -- Prompt,如果有安装dmenu,则使用dmenu，否则使用原生的prompt widget
+    -- Prompt,如果有安装rofi和dmenu,则使用rofi+dmenu，否则使用原生的prompt widget
     awful.key({ modkey },            "r",
       function ()
-        awful.spawn.easy_async_with_shell("dmenu_path|dmenu",function (stdout,stderr,exitreason,exitcode)
+        awful.spawn.easy_async_with_shell("dmenu_path|rofi -dmenu",function (stdout,stderr,exitreason,exitcode)
                                             if exitcode == 127 then -- 127表示命令没找到
                                               awful.screen.focused().mypromptbox:run()
                                             else
@@ -740,6 +740,12 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
 
     -- awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
     --   {description = "run prompt", group = "launcher"}),
+    -- 使用rofi快速切换窗口，ssh链接，运行程序等，使用Ctrl-Tab切换mode
+    awful.key({ modkey, "Shift" },            "r",
+      function ()
+        awful.spawn("rofi -show")
+      end,
+      {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
       function ()
