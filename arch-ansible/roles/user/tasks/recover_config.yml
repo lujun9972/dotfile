@@ -1,4 +1,12 @@
 ---
+- name: install bash-it
+  become_user: "{{user_name}}"
+  become: yes
+  block:
+    - git: accept_hostkey=yes dest=~/.bash-it repo=https://github.com/Bash-it/bash-it.git depth=1
+    - shell: "~/.bash-it/install.sh --silent"
+  tags: configuration
+
 - name: download configurations dotfile
   become_user: "{{user_name}}"
   become: yes
