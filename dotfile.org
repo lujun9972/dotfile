@@ -1404,17 +1404,8 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   fi
 #+END_SRC
 ** bashrc
-#+BEGIN_SRC sh :tangle "~/.bashrc"
-  #
-  # ~/.bashrc
-  #
-  # If not running interactively, don't do anything
-  [[ $- != *i* ]] && return
-
-  alias "vi=vim"
-  alias ls='ls --color=auto'
-  PS1='[\u@\h \W]\$ '
-  # 设置man page的染色方案
+设置man page的染色方案
+#+BEGIN_SRC sh :tangle "~/.bash-it/custom/plugins/available/manpage.plugin.bash"
   export LESS_TERMCAP_mb=$'\e[1;32m'
   export LESS_TERMCAP_md=$'\e[1;32m'
   export LESS_TERMCAP_me=$'\e[0m'
@@ -1422,7 +1413,10 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   export LESS_TERMCAP_so=$'\e[01;33m'
   export LESS_TERMCAP_ue=$'\e[0m'
   export LESS_TERMCAP_us=$'\e[1;4;31m'
+#+END_SRC
 
+#+BEGIN_SRC sh :tangle "~/.bash-it/custom/aliases/available/my.aliases.bash"
+  alias "vi=vim"
   if   urxvt -help 2>&1 |grep ^options |grep pixbuf >/dev/null;then
       alias urxvt='urxvt -pixmap $(find ~/Pictures/wallpaper -type f|shuf|head -n 1)'
   fi
