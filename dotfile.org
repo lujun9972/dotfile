@@ -433,7 +433,15 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
                               (emms-track-description 
                                 (emms-playlist-current-selected-track)))))']],2)
   #+END_SRC
-
+**** 显示Battery状态
+#+BEGIN_SRC  lua :tangle "~/.config/awesome/rc.lua"
+  -- 使用watch widget查看battery状态
+  customization.widgets.battery_watcher,customization.widgets.battery_timer = awful.widget.watch([[bash -c 'cd /sys/class/power_supply;
+    ACChargeState=$(grep "POWER_SUPPLY_ONLINE=" [Aa][Cc]/uevent|cut -d= -f2);
+    BatteryCapacity=$(grep "POWER_SUPPLY_CAPACITY=" [Bb][Aa][Tt][0-9]/uevent |cut -d= -f2);
+    test "${ACChargeState}" -eq "1" && ChargeState="AC" || ChargeState="Bat";
+    echo "${ChargeState} ${BatteryCapacity}%";']],60)
+  #+END_SRC
 **** 定义点击tag的行为
 =gears.table.join(tables)= 会遍历参数中的所有table中的key，插入成一个新的table
 
@@ -573,6 +581,8 @@ awful.widget.keyboardlayout:new ()创建一个键盘布局的widget,用于显示
                mykeyboardlayout,
                wibox.widget.systray(),
                customization.widgets.emms_watcher,
+               wibox.widget.textbox('  |  '),
+               customization.widgets.battery_watcher,
                wibox.widget.textbox('  |  '),
                mytextclock,
                customization.widgets.holiday_watcher,
