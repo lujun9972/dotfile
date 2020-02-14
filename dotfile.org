@@ -1698,3 +1698,17 @@ set -g default-command "${SHELL}"
   set -g set-titles on
   set -g set-titles-string "#T"
 #+END_SRC
+* git配置
+** 配置git commit template
+#+begin_src text :tangle "~/.gitmessage"
+  One liner describing the change(<=50 chars)
+
+  PROBLEM: Description of the problem goes here
+
+  SOLUTION: Description of the solution goes here
+
+  TESTS:
+  Explain the how you tested the change. If possible also provide links
+  where your working solution is hosted so that reviewer can test it.
+  How you tested this change.
+#+end_src
