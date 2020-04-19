@@ -1405,7 +1405,7 @@ client快捷键需要通过对client的keys属性来进行设置(参见Rules章�
   }
 
 
-  if [ -z "$DISPLAY" -a "$(fgconsole)" -eq 1 -a  "$(grep MemTotal /proc/meminfo |awk '{print $2}')" -gt  2097152 ];then # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
+  if [ -z "$DISPLAY" -a  "$(grep MemTotal /proc/meminfo |awk '{print $2}')" -gt  2097152 ];then # 自动启用X，如果希望在 X 会话终止时保持登入状态，删除 exec
       exec startx
   elif command_exist_p fbterm && command_exist_p fcitx-fbterm ;then
       # 启动fbterm
