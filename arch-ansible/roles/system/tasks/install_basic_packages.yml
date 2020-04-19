@@ -2,7 +2,6 @@
 - name: 安装必要软件
   pacman: "name={{item}} state=latest"
   with_items:
-    - gcc
     - sudo
     - yaourt
     - fcitx-im
@@ -30,3 +29,6 @@
     - rofi
     - intel-ucode
     - mailutils
+    - aspell
+    - aspell-en
+    - gcc
