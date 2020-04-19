@@ -2,7 +2,6 @@
 - name: 安装64位独有软件
   pacman: "name={{item}} state=latest"
   with_items:
-    - wps-office
-    - ttf-wps-fonts
-    - nutstore
+        - wps-office-cn
+        - nutstore
   when: "ansible_userspace_bits == '64'"
