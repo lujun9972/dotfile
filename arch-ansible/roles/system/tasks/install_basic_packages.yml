@@ -32,3 +32,5 @@
     - aspell
     - aspell-en
     - gcc
+    - zip
+    - unzip
