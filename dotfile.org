@@ -188,7 +188,7 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
           if gears.filesystem.is_dir(path) then
             table.insert(emacs_bookmark_menu, {name, "urxvt -cd " .. path}) -- 由于每个terminal设置默认目录的方法都不一样，因此这里写死terminal
           else
-            table.insert(emacs_bookmark_menu, {name, "xdg-open " .. path})
+            table.insert(emacs_bookmark_menu, {name, "emacsclient -a '' " .. path})
           end
         end
         awful.menu(emacs_bookmark_menu):show()
@@ -626,8 +626,7 @@ client鼠标操作是当有window获取到焦点时触发的操作，awesome将�
       awful.button({ modkey }, 3, awful.mouse.client.resize))
 #+END_SRC
 
-client鼠标操作需要通client的buttons属性来设置，参见后面的Rules章节
-*** 设置快捷键
+client鼠标操作需要通client的buttons属性来设置，参见后面的Rules章节快捷键
 每个快捷键都保存为一个key对象。
 
 key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，其中
