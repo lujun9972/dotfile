@@ -328,6 +328,7 @@ Awesome API分布在多个库中，需要一一加载才能用. 这些库包括:
     { "Eshell", [[emacsclient -c --eval "(progn
                                             (eshell 'new)
                                             (delete-other-windows))"]]},
+    { "org-capture", [[emacsclient --eval "(my/org-capture-out-of-emacs)"]]},
     { "dired", "dired.sh" },
     { "Firefox", "firefox" },
     { "open terminal", terminal }
@@ -701,6 +702,8 @@ key对象通过 =awful.key:new (mod, _key, press[, release], data)= 来产生，
       {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey,  "Shift" }, "f", function () awful.spawn("nemo") end,
       {description = "open a file manager", group = "launcher"}),
+    awful.key({ modkey,  "Control" }, "c", function () awful.spawn("emacsclient --eval '(my/org-capture-out-of-emacs)'") end,
+      {description = "org-capture", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
       {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
@@ -1713,12 +1716,12 @@ set -g default-command "${SHELL}"
 
   <type>(<scope>):One liner describing the change(<=50 chars)
 
-  PROBLEM: Description of the problem goes here
+  # PROBLEM: Description of the problem goes here
 
-  SOLUTION: Description of the solution goes here
+  # SOLUTION: Description of the solution goes here
 
-  TESTS:
-  Explain the how you tested the change. If possible also provide links
-  where your working solution is hosted so that reviewer can test it.
-  How you tested this change.
+  # TESTS:
+  # Explain the how you tested the change. If possible also provide links
+  # where your working solution is hosted so that reviewer can test it.
+  # How you tested this change.
 #+end_src
