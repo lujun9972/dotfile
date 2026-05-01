@@ -1726,3 +1726,87 @@ set -g default-command "${SHELL}"
   # where your working solution is hosted so that reviewer can test it.
   # How you tested this change.
 #+end_src
+* Claude Code 配置
+:PROPERTIES:
+:header-args: :tangle "~/CLAUDE.md"
+:END:
+
+本配置文件由 Claude Code 根据用户的工作记录（~/我的GTD）、博客（lujun9972.github.com）、笔记（~/我的笔记）和 Side Project（~/github）综合分析生成。如有变动，在此更新后 tangle 即可。
+
+使用方法：
+1. 在 Claude Code 中发起以下 prompt：
+   ~/我的GTD/ 存放了我的工作记录，~/github/lujun9972.github.com/ 存放了我写的博客，~/我的笔记/ 存放了我的笔记，~/github 存放了我的 side project。综合所有信息，帮我生成一份给 Claude Code 用的自我介绍
+2. Claude Code 会自动探索上述目录，分析文件内容，生成个人简介
+3. 将生成的自我介绍整理至此，通过 org-babel-tangle 输出到 ~/CLAUDE.md
+
+或者直接执行下面的 shell block 重新生成：
+#+BEGIN_SRC sh :results replace :file /tmp/claude-profile.md
+claude -p "综合分析 ~/我的GTD/（工作记录）、~/github/lujun9972.github.com/（博客）、~/我的笔记/（笔记）和 ~/github/（side project）这四个目录，生成一份给 Claude Code 用的自我介绍。
+
+要求：
+1. 只输出 markdown 正文，不要额外的说明文字
+2. 结构包含：个人简介 → 职业背景 → 技术专长 → 个人兴趣 → 工作方式偏好 → 编程偏好
+3. 每条内容精简，不留空泛的描述
+4. 仔细阅读各目录中的文件来提取真实信息
+
+输出格式直接从 '# 个人简介' 开始，不要包裹任何代码块标记。" --print
+#+END_SRC
+执行后检查 /tmp/claude-profile.md，然后将内容复制到下方的 markdown src block 中。
+
+#+BEGIN_SRC markdown
+# 个人简介
+
+这是关于用户 lujun9972（网名 DarkSun）的个人简介，帮助 Claude Code 更好地理解用户背景。
+
+## 职业背景
+- **行业**: 商业银行 IT 运维
+- **岗位职责**: 中间件服务管理、监控体系建设、IT 系统巡检与运维
+- **组织角色**: 参与过二代支付项目建设，负责金融服务平台、支付平台等核心系统的巡检
+- **技术方向**:
+  - **中间件**: WAS（WebSphere）、IBM MQ、国产中间件
+  - **运维自动化**: 蓝鲸平台、Ansible、Docker
+  - **监控体系**: 告警管理、指标管理、CMDB、ITIL 流程
+  - **系统**: Linux 系统管理、Shell 脚本、F5
+  - **编程**: Elisp（主力）、Python、Shell、Clojure、C、JavaScript
+  - **AI/LLM**: Claude Code 重度用户
+
+## 技术专长
+- **Emacs**: 10+ 年深度用户，Elisp 熟练，开发/维护多个 Emacs 包（EGO 静态站点生成器、emacs-habitica、interleave、nov.el、youdao-dictionary.el 等）
+- **Org-mode**: 专家级用户，完整的 GTD 系统 + org-roam 知识管理 + 博客发布
+- **Linux**: 系统编程、性能调优、Shell 脚本
+- **知识管理**: Zettelkasten + Org-roam 双链笔记，Claude Code AI 自动化知识卡片提取
+- **博客**: 长期写作者，lujun9972.github.com，涵盖 Emacs、Linux、AI、编程、读书笔记
+
+## 个人兴趣
+- **阅读**: 年均 10+ 本书（投资、编程、心理学、育儿）
+- **投资**: 指数基金/ETF 定投，价值投资
+- **语言**: 英语、日语（学习中）
+- **运动**: 跑步
+
+## 工作方式偏好
+- Emacs + Org-mode GTD 任务管理
+- org-roam 个人知识库
+- Claude Code 辅助编程和知识管理
+- 自动化、流程化、体系化的工作方法
+
+## 编程偏好
+
+### 语言偏好
+- **主力**: Elisp、Shell、Python
+- **兴趣**: Clojure（函数式编程）
+
+### 代码风格
+- 清晰命名，避免缩写；注释解释 why 而非 what
+- 函数短小单一职责，纯/非纯分离
+
+### 技术选型
+- 简单优先，优先选有成功案例的成熟方案
+
+### 流程偏好
+- TDD：先写测试再实现，红-绿-重构
+- 自动化优先，体系化思维（PDCA）
+- 一切操作可追溯可审计
+
+### 设计哲学
+- 函数式倾向：纯函数、不可变数据、组合优于继承
+#+END_SRC
