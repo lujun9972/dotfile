@@ -4,6 +4,9 @@
 #+DATE: [2016-10-20 四 08:17]
 #+OPTIONS: ^:{}
 
+#+WARNING: ⚠ 本文档编写于 2016-2017 年，部分内容已更新，但整体安装流程、网络配置方式等
+#+  与当前 Arch Linux 仍有较大差异，建议参考 [[https://wiki.archlinux.org/title/Installation_guide][Arch Wiki 安装指南]] 进行新系统安装。
+
 * 安装arch
 安装arch很简单，基本上按照arch wiki上写的一步步来就行了。
 
@@ -28,27 +31,17 @@
 
 * 配置网络
 
-1. 用 =wifi-menu= 配置好wifi
+1. 安装 iwd (现代无线网络管理，替代已废弃的 netctl/wpa_actiond)
    #+BEGIN_SRC sh :dir /sudo::
-     wifi-menu -o
+     pacman --noconfirm -S iwd
+     systemctl enable iwd
    #+END_SRC
 
-2. 安装自动连接wifi的软件包
+2. 也可使用 NetworkManager (功能更全，适合桌面环境)
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S --needed wpa_actiond ifplugd wpa_supplicant
+     pacman --noconfirm -S networkmanager
+     systemctl enable NetworkManager
    #+END_SRC
-   其中:
-   + wpa_actiond :: 用于自动连接无线网络（Wireless Roaming/autoconnect ）
-   + ifplugd :: 用于自动连接以太网（Wired link detection ）。
-   + wpa_supplicant :: 用于无线网络认证
-
-3. 关闭netctl服务,启动netctl-auto服务
-   #+BEGIN_SRC sh :dir /sudo::
-     systemctl disable netctl
-     systemctl enable netctl-auto@wlp4s2
-   #+END_SRC
-     
-   *不能同时启动netctl与netctl-auto*,两者冲突
 * 配置用户
 1. 创建用户
    #+BEGIN_SRC sh :dir /sudo::
@@ -77,16 +70,16 @@
   pacman --noconfirm -S archlinuxcn-keyring 
 #+END_SRC
 * AUR
-安装yaourt
+安装 yay (AUR helper, 替代已废弃的 yaourt)
 #+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S yaourt
+  pacman --noconfirm -S yay
 #+END_SRC
 
 * 配置中文输入法
 
-1. 安装fictx
+1. 安装 fcitx5 (替代已废弃的 fcitx4)
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S fcitx-im fcitx-configtool fcitx-sunpinyin
+     pacman --noconfirm -S fcitx5-im fcitx5-chinese-addons
    #+END_SRC
 
 2. 在.xinitrc中添加:
@@ -94,7 +87,7 @@
      export GTK_IM_MODULE=fcitx
      export QT_IM_MODULE=fcitx
      export XMODIFIERS="@im=fcitx"
-     fcitx &
+     fcitx5 &
    #+END_SRC
 
 * Git
@@ -128,7 +121,7 @@
 * openssh
 1. 安装openssh
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S git
+     pacman --noconfirm -S openssh
    #+END_SRC
 
 2. 自动启动sshd服务
@@ -159,22 +152,26 @@
      mv ~/.emacs.d ~/emacs.d.bak
      git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
    #+END_SRC
-3. spacemacs的python layer需要安装virtualenvwrapper
+3. spacemacs的python layer需要 virtualenvwrapper，但已从 Arch 仓库移除，需通过 pip 安装
    #+BEGIN_SRC shell :dir /sudo::
-     pacman --noconfirm -S python-virtualenvwrapper
+     pacman --noconfirm -S python-pip python-virtualenv
+     pip install virtualenvwrapper
    #+END_SRC
-
 * ShadowSocks
-** 安装
+** 安装 (shadowsocks 现更名为 shadowsocks-rust)
 #+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S shadowsocks
-  pacman --noconfirm -S shadowsocks-qt5
+  pacman --noconfirm -S shadowsocks-rust
+#+END_SRC
+
+*** 可选 GUI 客户端 (替代已移除的 shadowsocks-qt5)
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S v2ray-desktop
 #+END_SRC
 
 * 窗口管理器
 1. 安装X
    #+BEGIN_SRC sh :dir /sudo::
-     pacman -S xorg xorg-server xorg-server-utils xorg-xinit  # 安装 Xorg
+     pacman -S xorg xorg-server xorg-xinit  # 安装 Xorg (xorg-server-utils 已不存在)
      # pacman -S xf86-input-synaptics    # 可选，触摸板支持
      pacman -S ttf-dejavu wqy-microhei    # 可选，Dejavu 与文泉驿 - 微米黑字体
    #+END_SRC
@@ -216,9 +213,9 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
      pacman --noconfirm -S terminator
    #+END_SRC
 * 文件管理器(可选，用dired代替)
-1. rox
+1. pcmanfm (轻量级文件管理器，替代已移除的 rox)
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S rox
+     pacman --noconfirm -S pcmanfm
    #+END_SRC
 * 多媒体
 ** 看图工具
@@ -235,9 +232,9 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S mpv
    #+END_SRC
-* 坚果云
+* 坚果云 (需从 AUR 安装)
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S nutstore
+     yay --noconfirm -S nutstore
    #+END_SRC
 * zeal
    #+BEGIN_SRC shell :dir /sudo::
@@ -250,18 +247,14 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    #+END_SRC
 * 终端环境下的工具 
 ** 配置中文环境
-1. fbterm支持终端环境中文处理
+1. fbterm 支持终端环境中文处理 (已从官方仓库移除，仅 AUR 可用)
+   若在 X/Wayland 下，直接使用终端模拟器 + fcitx5 即可，无需 fbterm。
    #+BEGIN_SRC sh :dir /sudo:: :var YOUR_USERNAME=(user-login-name)
-     # pacman --noconfirm -S fbterm libx86
-     # 若想使用非根用户运行fbterm，需要把用户加入video组
-     # 在最近的更新中fbterm已经不在pacman的package中了,需要用
-     yaourt -S fbterm libx86
-     # 来安装
+     yay -S fbterm libx86
      gpasswd -a $YOUR_USERNAME video
-     # 若想非根用户可使用键盘快捷方式，需要：
      sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
    #+END_SRC
-     
+
    fbterm本身还支持多窗口:
    | 快捷键   | 功能说明            |
    |----------+---------------------|
@@ -269,11 +262,10 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
    | C-M-C    | 创建新窗口          |
    | C-M-数字 | 切换到第N个窗口     |
    | S-方向键 | 切换到上/下一个窗口 |
-   
-2. 使用fcitx-fbterm作为中文输入法
+
+2. 使用fcitx-fbterm作为中文输入法 (仅 AUR 可用，且 fcitx4 已过时)
    #+BEGIN_SRC sh :dir /sudo::
-     # pacman --noconfirm -S fcitx-fbterm
-     # 在最近的更新中fcitx-fbterm已经不在pacman的package中了,需要从github上下载源代码来编译
+     yay -S fcitx-fbterm-git
    #+END_SRC
      安装好后，可以通过 =fcitx-fbterm-helper -l= 启动中文输入法
 3. 安装framebuffer下的虚拟X server
@@ -291,9 +283,9 @@ Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer
  #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S mpg123
  #+END_SRC
-*** moc
+*** cmus (替代已移除的 moc)
  #+BEGIN_SRC sh :dir /sudo::
-   pacman --noconfirm -S moc
+   pacman --noconfirm -S cmus
  #+END_SRC
 *** mplayer
 安装mplayer
@@ -327,57 +319,23 @@ mplayer在播放时支持以下快捷键:
 + 7 和 8 :: 调整饱和度
 
 更多的mplayer操作参见 [[https://linuxtoy.org/archives/playing-around-with-mplayer.html][玩转 MPlayer]]
-*** musicbox
-高品质网易云音乐命令行版本，简洁优雅，丝般顺滑，基于Python编写。
-#+BEGIN_SRC sh
-  pacman -S --noconfirm netease-musicbox-git
+*** musicfox (命令行版网易云音乐，替代已失效的 netease-musicbox-git)
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S go-musicfox-git
 #+END_SRC
-#+NAME: 键盘快捷键
-| J     | Down            | 下移               |
-| K     | Up              | 上移               |
-| H     | Back            | 后退               |
-| L     | Forword         | 前进               |
-| U     | Prev page       | 上一页             |
-| D     | Next page       | 下一页             |
-| F     | Search          | 快速搜索           |
-| [     | Prev song       | 上一曲             |
-| ]     | Next song       | 下一曲             |
-| =     | Volume +        | 音量增加           |
-| -     | Volume -        | 音量减少           |
-| Space | Play/Pause      | 播放/暂停          |
-| ?     | Shuffle         | 手气不错           |
-| M     | Menu            | 主菜单             |
-| P     | Present/History | 当前/历史播放列表  |
-| I     | Music Info      | 当前音乐信息       |
-| ⇧+P   | Playing Mode    | 播放模式切换       |
-| A     | Add             | 添加曲目到打碟     |
-| ⇧+A   | Enter album     | 进入专辑           |
-| G     | To the first    | 跳至首项           |
-| ⇧+G   | To the end      | 跳至尾项           |
-| Z     | DJ list         | 打碟列表           |
-| S     | Star            | 添加到收藏         |
-| C     | Collection      | 收藏列表           |
-| R     | Remove          | 删除当前条目       |
-| ⇧+J   | Move Down       | 向下移动当前项目   |
-| ⇧+K   | Move Up         | 向上移动当前项目   |
-| ⇧+C   | Cache           | 缓存歌曲到本地     |
-| ,     | Like            | 喜爱               |
-| .     | Trash FM        | 删除 FM            |
-| /     | Next FM         | 下一FM             |
-| Q     | Quit            | 退出               |
-| W     | Quit&Clear      | 退出并清除用户信息 |
+
+*** netease-cloud-music-gtk4 (GTK4 图形界面版网易云音乐)
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S netease-cloud-music-gtk4
+#+END_SRC
 *** Emacs+EMMS+wangyi-music
-*** cmus
- #+BEGIN_SRC shell :dir /sudo::
-   pacman --noconfirm -S moc
- #+END_SRC
 ** w3m浏览网页
 #+BEGIN_SRC sh :dir /sudo::
    pacman --noconfirm -S w3m imlib2
 #+END_SRC
-** ledger基于终端的帐务管理软件
+** ledger基于终端的帐务管理软件 (已在官方 extra 源，无需 yay)
 #+BEGIN_SRC sh :dir /sudo::
-  yaourt --noconfirm -S ledger
+  pacman --noconfirm -S ledger
 #+END_SRC
 ** 下载
 1. rtorrent
@@ -385,7 +343,7 @@ mplayer在播放时支持以下快捷键:
      pacman --noconfirm -S rtorrent
    #+END_SRC
 
-2. aria2
+2. aria2 (aria2-fast 与 aria2 冲突，直接安装 aria2 即可)
    #+BEGIN_SRC sh :dir /sudo::
      pacman --noconfirm -S aria2 aria2-fast
    #+END_SRC
@@ -398,46 +356,43 @@ mplayer在播放时支持以下快捷键:
      
    关于calcurse的用法,推荐阅读 [[https://linux.cn/article-4853-1.html][在 Linux 终端下使用 calcurse 安排约会和待办事项]]
 
-2. remind+wyrd
+2. remind (wyrd 已从仓库移除，用 calcurse 或 Emacs Org-mode 替代)
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S remind wyrd
+     pacman --noconfirm -S remind
    #+END_SRC
 
 3. Emacs+Org+diary
      
 ** RSS & podcaster
-1. newsbeuter
+1. newsboat (原 newsbeuter 已改名)
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S newsbeuter
+     pacman --noconfirm -S newsboat
    #+END_SRC
-   
-   关于newsbeuter的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
+
+   关于newsboat的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
 
 2. Emacs+elfeed+podcaster
-** 查看PDF,图片:fbida
-1. 安装
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S fbida
-   #+END_SRC
+** 查看PDF,图片
+在 TTY 下用 fbida，在 X/Wayland 下用 feh/sxiv/zathura：
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S fbida feh sxiv zathura zathura-pdf-poppler
+#+END_SRC
 
-2. 用法
+** 截图工具
+在 TTY 下用 fbgrab，在 X/Wayland 下用 scrot：
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S fbgrab scrot
+#+END_SRC
 
-   + 使用fbi查看图片
+TTY 下用 fbgrab:
+#+BEGIN_SRC shell
+  fbgrab [options] filename
+#+END_SRC
 
-   + 使用fbpdf查看pdf
-
-** 截图工具:fbgrab
-1. 安装
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S fbgrab
-   #+END_SRC
-
-2. 用法
-   fbgrab会抓取frambuffer device中的屏幕内容并转存为png文件. 
-   它的使用方法也很简单:
-   #+BEGIN_SRC shell
-     fbgrab [options] filename
-   #+END_SRC
+X/Wayland 下用 scrot:
+#+BEGIN_SRC shell
+  scrot [options] filename
+#+END_SRC
      
    其中常见的选项有:
    
@@ -452,11 +407,10 @@ mplayer在播放时支持以下快捷键:
    + -z :: 设定png文件的压缩等级,从0(最快)到9(压缩效果最好)
            
 ** IM工具
-1. finch
+1. weechat (终端 IRC 客户端，替代已移除的 finch)
 
-   这个可以看成是pidgin的CLI版
    #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S finch
+     pacman --noconfirm -S weechat
    #+END_SRC
 
 
@@ -469,7 +423,7 @@ mplayer在播放时支持以下快捷键:
      
 ** 讲稿演示
  #+BEGIN_SRC shell :dir /sudo::
-   yaourt --noconfirm -S tpp
+   yay --noconfirm -S tpp
  #+END_SRC
 ** 有趣的工具
 1. pv

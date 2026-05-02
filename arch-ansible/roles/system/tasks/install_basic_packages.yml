@@ -3,7 +3,8 @@
   pacman: "name={{item}} state=latest"
   with_items:
     - sudo
-    - yaourt
+    - yay
+    - anki
     - fcitx-im
     - fcitx-configtool
     - fcitx-sunpinyin

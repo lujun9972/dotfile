@@ -1,3 +1,5 @@
+#+WARNING: ⚠ 本文档编写于 2016 年，内容严重过时，仅供参考。
+
 * update apt source
 #+BEGIN_SRC sh
   sudo apt-get update

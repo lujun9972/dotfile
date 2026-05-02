@@ -1,11 +1,4 @@
 ---
-- name: 安装AUR中的package
-  become_user: "{{user_name}}"
-  become: yes
-  command: "yaourt -S --noconfirm {{item.name}}"
-  args:
-    creates: "{{item.object}}"
-  with_items:
-    - name: "anki20-bin"
-      object: "/usr/bin/anki"
-  tags: aur,package
+# AUR 包安装
+# anki 已进入官方 extra 源，移至 install_basic_packages.yml
+# 如有新的 AUR 包需求，在此添加

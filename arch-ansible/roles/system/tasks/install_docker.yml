@@ -3,5 +3,18 @@
   block:
     - pacman: "name=docker state=latest"
     - service: "name=docker enabled=yes state=started"
-    - shell: "curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://31d9bf6d.m.daocloud.io"
+    - name: 配置 Docker 国内镜像加速
+      copy:
+        dest: /etc/docker/daemon.json
+        content: |
+          {
+            "registry-mirrors": [
+              "https://docker.xuanyuan.me",
+              "https://docker.1ms.run",
+              "https://docker.m.daocloud.io"
+            ]
+          }
+        mode: "0644"
+    - name: 重启 docker 使镜像配置生效
+      service: "name=docker state=restarted"
   tags: docker
