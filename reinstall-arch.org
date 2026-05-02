@@ -1,64 +1,52 @@
 #+TITLE: 装Arch记
 #+AUTHOR: lujun9972
 #+CATEGORY: dotfile
-#+DATE: [2016-10-20 四 08:17]
+#+DATE: [2026-05-02 六 08:00]
 #+OPTIONS: ^:{}
 
-#+WARNING: ⚠ 本文档编写于 2016-2017 年，部分内容已更新，但整体安装流程、网络配置方式等
-#+  与当前 Arch Linux 仍有较大差异，建议参考 [[https://wiki.archlinux.org/title/Installation_guide][Arch Wiki 安装指南]] 进行新系统安装。
+* 说明
 
-* 安装arch
-安装arch很简单，基本上按照arch wiki上写的一步步来就行了。
+本文档最早编写于 2016 年，记录了我每次重装 Arch Linux 后需要做的配置。随着时间推移，很多软件包和配置方式已经发生了变化，现整理成一份当前可用的版本。
 
-我主要参考了两个链接：
-[[http://bbs.archlinuxcn.org/viewtopic.php?id=1037][Arch Linux 安装指南]]
+Arch Linux 基本系统的安装步骤（分区、格式化、pacstrap、arch-chroot 等）推荐直接参考官方 Wiki：
+[[https://wiki.archlinux.org/title/Installation_guide][Arch Wiki 安装指南]]
 
-[[https://wiki.archlinux.org/index.php/Installation_guide_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Arch wiki 安装指南]]
-
-不过在过程中还是遇到了一个小坑：
-
-按照Wiki的说法, =arch-chroot= 之后需要再次设置网络，但是我用wifi-menu重设了一次无线网络后，结果提示
-#+BEGIN_EXAMPLE
-  Interface 'wlp4s2' is controlled by netctl-auto
-#+END_EXAMPLE
-
-然后尝试ping外网发现网络是断的。推出chroot后用 =ip link= 发现wlp4s2接口被down掉了.
-
-在up该接口后,回复互联网的访问. 然后重新进入 =arch-chroot= 继续后面的操作.
-#+BEGIN_SRC sh
-  ip link set wlp4s2 up
-#+END_SRC
+本文档从 arch-chroot 之后的步骤开始。
 
 * 配置网络
 
-1. 安装 iwd (现代无线网络管理，替代已废弃的 netctl/wpa_actiond)
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S iwd
-     systemctl enable iwd
-   #+END_SRC
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S iwd
+  systemctl enable iwd
+#+END_SRC
 
-2. 也可使用 NetworkManager (功能更全，适合桌面环境)
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S networkmanager
-     systemctl enable NetworkManager
-   #+END_SRC
+若在桌面环境使用，也可选择 NetworkManager：
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S networkmanager
+  systemctl enable NetworkManager
+#+END_SRC
+
 * 配置用户
+
 1. 创建用户
    #+BEGIN_SRC sh :dir /sudo::
      useradd -m -g users -s /bin/bash lujun9972
-     # passwd lujun9972
    #+END_SRC
-2. 配置sudo
+
+2. 设置密码并加入 wheel 组
    #+BEGIN_SRC sh :dir /sudo::
-     visudo
-   #+END_SRC
-   让wheel组的用户能够suduo
-3. 将用户加入wheel组
-   #+BEGIN_SRC sh /sudo::
+     passwd lujun9972
      usermod -a -G wheel lujun9972
    #+END_SRC
 
-* 添加Archlinux CN 镜像源
+3. 配置 sudo，让 wheel 组可以使用 sudo
+   #+BEGIN_SRC sh :dir /sudo::
+     visudo
+   #+END_SRC
+   取消 =%wheel ALL=(ALL:ALL) ALL= 的注释
+
+* 添加 Arch Linux CN 镜像源
+
 #+BEGIN_SRC shell :dir /sudo::
   cat >>/etc/pacman.conf <<EOF
   [archlinuxcn]
@@ -67,392 +55,243 @@
   EOF
 
   pacman -Syy
-  pacman --noconfirm -S archlinuxcn-keyring 
+  pacman --noconfirm -S archlinuxcn-keyring
 #+END_SRC
-* AUR
-安装 yay (AUR helper, 替代已废弃的 yaourt)
+
+* 安装 yay (AUR 助手)
+
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S yay
 #+END_SRC
 
-* 配置中文输入法
+* 基础软件包
 
-1. 安装 fcitx5 (替代已废弃的 fcitx4)
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S fcitx5-im fcitx5-chinese-addons
-   #+END_SRC
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S \
+    git openssh pandoc \
+    bash-completion \
+    zip unzip unrar ntfs-3g \
+    cmake gcc \
+    aspell aspell-en \
+    mailutils \
+    intel-ucode
+#+END_SRC
 
-2. 在.xinitrc中添加:
-   #+BEGIN_SRC conf
-     export GTK_IM_MODULE=fcitx
-     export QT_IM_MODULE=fcitx
-     export XMODIFIERS="@im=fcitx"
-     fcitx5 &
-   #+END_SRC
+* 桌面环境
 
-* Git
-1. 安装git
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S git
-   #+END_SRC
+** Xorg
 
-2. 配置git
-   #+BEGIN_SRC sh
-     git config --global --global user.email "lujun9972@gmail.com"
-     git config --global --global user.name "darksun"
-     git config --global core.quotepath false
-     # 配置diff工具
-     git config --global diff.tool ediff
-     git config --global difftool.ediff.cmd "~/bin/ediff.sh \"\$LOCAL\" \"\$REMOTE\""
-     git config --global difftool.prompt false
-     # 配置merge工具
-     git config --global merge.tool ediff
-     git config --global mergetool.ediff.cmd "~/bin/ediff_merge.sh \"$BASE\" \"\$LOCAL\" \"\$REMOTE\" \"$MERGED\""
-     git config --global mergetool.prompt false
-     # git config --global mergetool.ediff.trustExitCode true
-   #+END_SRC
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S xorg xorg-server xorg-xinit
+  # 可选：触摸板驱动
+  # pacman -S xf86-input-synaptics
+#+END_SRC
 
-   #+RESULTS:
-* pandoc
-1. 安装pandoc
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S pandoc
-   #+END_SRC
-* openssh
-1. 安装openssh
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S openssh
-   #+END_SRC
+** 字体
 
-2. 自动启动sshd服务
-   #+BEGIN_SRC shell :dir /sudo::
-     systemctl enable sshd.service
-   #+END_SRC
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S ttf-dejavu wqy-microhei
+#+END_SRC
 
-   #+RESULTS:
+** Awesome WM
 
-3. 生成公钥
-   #+BEGIN_SRC sh
-     ssh-keygen -y
-     cat .ssh/id_rsa.pub
-   #+END_SRC
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S awesome archlinux-xdg-menu
+#+END_SRC
 
-4. 将公钥内容放到 [[https://www.github.com][github]] 中
+在 =~/.xinitrc= 中添加：
+#+BEGIN_SRC conf
+  exec awesome
+#+END_SRC
 
-* Emacs
-1. 安装Emacs
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S emacs
-   #+END_SRC
-2. 安装配置
-   #+BEGIN_SRC sh
-     git clone git@github.com:lujun9972/bin.git ~/bin
-     git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
-     git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
-     mv ~/.emacs.d ~/emacs.d.bak
-     git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
-   #+END_SRC
-3. spacemacs的python layer需要 virtualenvwrapper，但已从 Arch 仓库移除，需通过 pip 安装
-   #+BEGIN_SRC shell :dir /sudo::
-     pacman --noconfirm -S python-pip python-virtualenv
-     pip install virtualenvwrapper
-   #+END_SRC
-* ShadowSocks
-** 安装 (shadowsocks 现更名为 shadowsocks-rust)
+生成 XDG 菜单：
+#+BEGIN_SRC sh
+  mkdir -p ~/.config/awesome/
+  xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
+#+END_SRC
+
+** 中文输入法 (fcitx5)
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S fcitx5-im fcitx5-chinese-addons
+#+END_SRC
+
+在 =~/.xinitrc= 中添加：
+#+BEGIN_SRC conf
+  export GTK_IM_MODULE=fcitx5
+  export QT_IM_MODULE=fcitx5
+  export XMODIFIERS="@im=fcitx5"
+  fcitx5 &
+#+END_SRC
+
+* 声音配置
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S alsa-utils pulseaudio-alsa
+#+END_SRC
+
+Arch Linux 默认静音，用 =alsamixer= 取消 Master 和 PCM 的静音（按 M 键）。
+
+* 网络工具
+
+** ShadowSocks
+
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S shadowsocks-rust
 #+END_SRC
 
-*** 可选 GUI 客户端 (替代已移除的 shadowsocks-qt5)
+可选 GUI 客户端：
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S v2ray-desktop
 #+END_SRC
 
-* 窗口管理器
-1. 安装X
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman -S xorg xorg-server xorg-xinit  # 安装 Xorg (xorg-server-utils 已不存在)
-     # pacman -S xf86-input-synaptics    # 可选，触摸板支持
-     pacman -S ttf-dejavu wqy-microhei    # 可选，Dejavu 与文泉驿 - 微米黑字体
-   #+END_SRC
+** 浏览器
 
-2. 安装awesomeWm
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S awesome
-   #+END_SRC
-
-3. 在.xinitrc中添加:
-   #+BEGIN_SRC conf
-     exec awesome
-   #+END_SRC
-
-4. 安装archlinux-xdg-menu
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S archlinux-xdg-menu
-   #+END_SRC
-
-5. 生成awesome menu
-   #+BEGIN_SRC sh 
-     mkdir -p ~/.config/awesome/
-     xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu >~/.config/awesome/archmenu.lua
-   #+END_SRC
-
-
-* 声音配置
-Arch Linux默认开启了声音支持，默认静音。用户可通过 alsamixer（所属包：alsa-utils） 取消静音：
-#+BEGIN_SRC sh
-  pacman --noconfirm -S alsa-utils
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S w3m imlib2
 #+END_SRC
 
-+ 方向键 选中 Master 和 PCM
-+ [M] 取消静音
-+ 上下键调整音量
-* Terminator(可选,用eshell代替)
-1. terminator
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S terminator
-   #+END_SRC
-* 文件管理器(可选，用dired代替)
-1. pcmanfm (轻量级文件管理器，替代已移除的 rox)
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S pcmanfm
-   #+END_SRC
-* 多媒体
-** 看图工具
-1. feh
-   #+BEGIN_SRC  sh :dir /sudo::
-     pacman --noconfirm -S feh
-   #+END_SRC
-2. sxiv
-   #+BEGIN_SRC  sh :dir /sudo::
-     pacman --noconfirm -S sxiv
-   #+END_SRC
-** 看视频
-1. mpv
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S mpv
-   #+END_SRC
-* 坚果云 (需从 AUR 安装)
-   #+BEGIN_SRC sh :dir /sudo::
-     yay --noconfirm -S nutstore
-   #+END_SRC
-* zeal
-   #+BEGIN_SRC shell :dir /sudo::
-     pacman --noconfirm -S zeal
-   #+END_SRC
+* 开发工具
 
-* wps
-   #+BEGIN_SRC shell :dir /sudo::
-     pacman --noconfirm -S wps-office ttf-wps-fonts
-   #+END_SRC
-* 终端环境下的工具 
-** 配置中文环境
-1. fbterm 支持终端环境中文处理 (已从官方仓库移除，仅 AUR 可用)
-   若在 X/Wayland 下，直接使用终端模拟器 + fcitx5 即可，无需 fbterm。
-   #+BEGIN_SRC sh :dir /sudo:: :var YOUR_USERNAME=(user-login-name)
-     yay -S fbterm libx86
-     gpasswd -a $YOUR_USERNAME video
-     sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
-   #+END_SRC
+** Emacs + Spacemacs
 
-   fbterm本身还支持多窗口:
-   | 快捷键   | 功能说明            |
-   |----------+---------------------|
-   | C-M-E    | 退出fbterm          |
-   | C-M-C    | 创建新窗口          |
-   | C-M-数字 | 切换到第N个窗口     |
-   | S-方向键 | 切换到上/下一个窗口 |
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S emacs
+#+END_SRC
 
-2. 使用fcitx-fbterm作为中文输入法 (仅 AUR 可用，且 fcitx4 已过时)
-   #+BEGIN_SRC sh :dir /sudo::
-     yay -S fcitx-fbterm-git
-   #+END_SRC
-     安装好后，可以通过 =fcitx-fbterm-helper -l= 启动中文输入法
-3. 安装framebuffer下的虚拟X server
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S xorg-server-xvfb xf86-video-fbdev
-   #+END_SRC
-4. framebuffer设置工具
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S fbset
-   #+END_SRC
-   
+#+BEGIN_SRC sh
+  git clone git@github.com:lujun9972/bin.git ~/bin
+  git clone git@github.com:lujun9972/MyLisp.git ~/MyLisp
+  git clone git@github.com:lujun9972/.spacemacs.d.git ~/.spacemacs.d
+  mv ~/.emacs.d ~/emacs.d.bak
+  git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+#+END_SRC
+
+Spacemacs 的 python layer 需要 virtualenvwrapper（已从 Arch 仓库移除，通过 pip 安装）：
+#+BEGIN_SRC shell :dir /sudo::
+  pacman --noconfirm -S python-pip python-virtualenv
+  pip install virtualenvwrapper
+#+END_SRC
+
+* 终端工具
+
+** 终端模拟器
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S terminator rxvt-unicode
+#+END_SRC
+
+** 文件管理器
+
+轻量级文件管理器 pcmanfm（若主要在 Emacs 中使用 dired，可跳过）：
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S pcmanfm
+#+END_SRC
+
+** 看图与截图
+
+- TTY 下：fbida (看图/PDF)、fbgrab (截图)
+- X/Wayland 下：feh/sxiv (看图)、zathura (PDF)、scrot (截图)
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S feh sxiv zathura zathura-pdf-poppler
+  # TTY 工具（可选）：
+  # pacman --noconfirm -S fbida fbgrab
+#+END_SRC
+
+** 终端中文环境 (TTY)
+
+若需要在纯 TTY 环境下显示和输入中文，fbterm 已从官方仓库移除，需从 AUR 安装：
+#+BEGIN_SRC sh :dir /sudo:: :var YOUR_USERNAME=(user-login-name)
+  yay -S fbterm libx86
+  gpasswd -a $YOUR_USERNAME video
+  sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
+#+END_SRC
+
+中文输入法：
+#+BEGIN_SRC sh :dir /sudo::
+  yay -S fcitx-fbterm-git
+#+END_SRC
+
+启动方式：=fcitx-fbterm-helper -l=
 
 ** 媒体播放
-*** mpg123
- #+BEGIN_SRC sh :dir /sudo::
-   pacman --noconfirm -S mpg123
- #+END_SRC
-*** cmus (替代已移除的 moc)
- #+BEGIN_SRC sh :dir /sudo::
-   pacman --noconfirm -S cmus
- #+END_SRC
-*** mplayer
-安装mplayer
+
 #+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S mplayer
+  pacman --noconfirm -S mpv mplayer mpg123 cmus
 #+END_SRC
 
-mplayer支持在终端环境下播放影片,但是需要指明输出驱动:
-#+BEGIN_SRC sh :var MEDIA_FILE=(read-file-name "请选择要播放的视频")
-  mplayer -vo fbdev2 $MEDIA_FILE
-#+END_SRC
+** 网易云音乐
 
-mplayer在播放时支持以下快捷键:
-
-+ 左方向键和右方向键 :: 分别执行倒退 10 秒和快进 10 秒操作
-+ 下方向键和上方向键 :: 分别执行倒退 1 分钟和快进 1 分钟操作
-+ 下翻页键和上翻页键 :: 分别执行倒退 10 分钟和快进 10 分钟操作
-+ f :: 当播放视频时，在全屏和窗口模式之间切换。你也可以在命令行中使用 -fs 选项，以便让 MPlayer 开始在全屏模式中播放。
-+ o :: 在播放视频时切换 OSD（OnScreen Display）模式。
-+ p 或 Space :: 暂停／继续播放。
-+ q 或 Esc :: 退出 MPlayer。在 GUI 模式时，Esc 不会退出，仅停止播放。
-+ / 和 * 或 9 和 0 :: 减小或增大音量。
-+ m :: 静音切换。
-+ T（通常是 Shift + t） :: 播放窗口置顶切换。
-+ b 和 j :: 在可用的字幕间循环。
-+ x 和 z :: 调整字幕的延迟时间。
-+ I（Shift + i） :: 显示播放电影的文件名称。
-+ 1 和 2 :: 调整对比度。
-+ 3 和 4 :: 调整亮度。
-+ 5 和 6 :: 调整色度。
-+ 7 和 8 :: 调整饱和度
-
-更多的mplayer操作参见 [[https://linuxtoy.org/archives/playing-around-with-mplayer.html][玩转 MPlayer]]
-*** musicfox (命令行版网易云音乐，替代已失效的 netease-musicbox-git)
+命令行版：
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S go-musicfox-git
 #+END_SRC
 
-*** netease-cloud-music-gtk4 (GTK4 图形界面版网易云音乐)
+GTK4 图形界面版：
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S netease-cloud-music-gtk4
 #+END_SRC
-*** Emacs+EMMS+wangyi-music
-** w3m浏览网页
+
+** RSS 阅读器
+
 #+BEGIN_SRC sh :dir /sudo::
-   pacman --noconfirm -S w3m imlib2
+  pacman --noconfirm -S newsboat
 #+END_SRC
-** ledger基于终端的帐务管理软件 (已在官方 extra 源，无需 yay)
+
+** 下载工具
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S aria2 rtorrent
+#+END_SRC
+
+** 日历与日程
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S calcurse remind
+#+END_SRC
+
+** 记账
+
+Ledger 已在官方 extra 源：
 #+BEGIN_SRC sh :dir /sudo::
   pacman --noconfirm -S ledger
 #+END_SRC
-** 下载
-1. rtorrent
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S rtorrent
-   #+END_SRC
 
-2. aria2 (aria2-fast 与 aria2 冲突，直接安装 aria2 即可)
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S aria2 aria2-fast
-   #+END_SRC
+** 其他实用工具
 
-** 日历系统
-1. calcurse
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S calcurse
-   #+END_SRC
-     
-   关于calcurse的用法,推荐阅读 [[https://linux.cn/article-4853-1.html][在 Linux 终端下使用 calcurse 安排约会和待办事项]]
-
-2. remind (wyrd 已从仓库移除，用 calcurse 或 Emacs Org-mode 替代)
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S remind
-   #+END_SRC
-
-3. Emacs+Org+diary
-     
-** RSS & podcaster
-1. newsboat (原 newsbeuter 已改名)
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S newsboat
-   #+END_SRC
-
-   关于newsboat的用法可以参见[[https://linuxtoy.org/archives/newsbeuter.html][Newsbeuter：在控制台下读 RSS 新闻]]
-
-2. Emacs+elfeed+podcaster
-** 查看PDF,图片
-在 TTY 下用 fbida，在 X/Wayland 下用 feh/sxiv/zathura：
 #+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S fbida feh sxiv zathura zathura-pdf-poppler
+  pacman --noconfirm -S zeal pv toilet
 #+END_SRC
 
-** 截图工具
-在 TTY 下用 fbgrab，在 X/Wayland 下用 scrot：
+* 可选应用
+
+** 坚果云 (AUR)
+
 #+BEGIN_SRC sh :dir /sudo::
-  pacman --noconfirm -S fbgrab scrot
+  yay --noconfirm -S nutstore
 #+END_SRC
 
-TTY 下用 fbgrab:
-#+BEGIN_SRC shell
-  fbgrab [options] filename
+** WPS Office
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S wps-office ttf-wps-fonts
 #+END_SRC
 
-X/Wayland 下用 scrot:
-#+BEGIN_SRC shell
-  scrot [options] filename
+** 终端 IRC 客户端
+
+#+BEGIN_SRC sh :dir /sudo::
+  pacman --noconfirm -S weechat
 #+END_SRC
-     
-   其中常见的选项有:
-   
-   + -s n :: 等待n秒后再开始抓图
 
-   + -b bitdepth :: 指定抓取像素的色彩位数
+* 恢复 dotfile 配置
 
-   + -h height :: 指定抓取的高度,以像素为单位.
+我的配置文件全部以 Org-mode src block 的形式托管在 GitHub 上，只需 tangl 即可恢复：
 
-   + -w width :: 指定抓取的宽度,以像素为单位.
-
-   + -z :: 设定png文件的压缩等级,从0(最快)到9(压缩效果最好)
-           
-** IM工具
-1. weechat (终端 IRC 客户端，替代已移除的 finch)
-
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S weechat
-   #+END_SRC
-
-
-   
-** 游戏
-1. nethack
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S nethack
-   #+END_SRC
-     
-** 讲稿演示
- #+BEGIN_SRC shell :dir /sudo::
-   yay --noconfirm -S tpp
- #+END_SRC
-** 有趣的工具
-1. pv
-   
-   pv可以以实时敲打出来的方式显示一段文字
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S pv
-   #+END_SRC
-
-2. toilet
-   
-   toilet可以为一段文字添加边框
-   #+BEGIN_SRC sh :dir /sudo::
-     pacman --noconfirm -S toilet
-   #+END_SRC
-
-
-
-
-* 恢复配置
-我用Emacs的org-mode来管理dotfile. 
-
-所有的dotfile基本都以src block的形式存在https://github.com/lujun9972/dotfile/blob/master/dotfile.org 中了
-
-只需要执行下面这段emacs-lisp代码就能恢复配置了
 #+BEGIN_SRC emacs-lisp :results raw
   (require 'url-handlers)
   (let ((tmpfile (make-temp-name "/tmp/dotfile")))
-    (url-copy-file  "https://raw.githubusercontent.com/lujun9972/dotfile/master/dotfile.org" tmpfile)
+    (url-copy-file "https://raw.githubusercontent.com/lujun9972/dotfile/master/dotfile.org" tmpfile)
     (find-file tmpfile)
     (org-mode)
     (call-interactively #'org-babel-tangle)
